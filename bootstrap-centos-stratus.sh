@@ -14,7 +14,8 @@ sudo yum group install -y "Development Tools"
 sudo yum install -y gettext-devel perl-CPAN perl-devel zlib-devel nano expect tcl
 
 # Install certbot (Let's Encrypt)
-sudo yum install certbot -y
+#sudo yum install certbot -y
+sudo yum install python2-certbot-nginx -y
 
 # Install nginx
 sudo yum install nginx -y
