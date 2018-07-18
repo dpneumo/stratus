@@ -1,0 +1,17 @@
+[DEFAULT]
+ignoreip = 127.0.0.1/8 192.168.1.90
+
+# Ban for an hour
+bantime  = 3600
+
+# These lines combine to ban clients that fail
+# to authenticate 6 times within an hour.
+findtime = 3600
+maxretry = 6
+
+# email notifications
+#mta        = sendmail
+#mta        = mail
+#destemail  = dpneumo@gmail.com
+#sendername = Fail2BanAlerts
+#action     = %(action_mwl)s

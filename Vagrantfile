@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
     stratus.vm.network "forwarded_port", guest: 3000, host: 3000
     # config.vm.network "public_network", bridge: "host_controller_name - see README"
     config.vm.network "public_network", bridge: "Realtek PCIe FE Family Controller"
-    stratus.vm.boot_timeout = 400
+    stratus.vm.boot_timeout = 600
     stratus.vm.provider "virtualbox" do |vb|
       vb.memory = "256"
     end
