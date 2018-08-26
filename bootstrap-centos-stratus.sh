@@ -22,7 +22,8 @@ sudo yum install nginx -y
 sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.$(date +%s)
 sudo cp /vagrant/nginx/nginx.conf /etc/nginx/nginx.conf
 sudo cp /vagrant/nginx/cirrus.conf /etc/nginx/conf.d/cirrus.conf.443
-sudo cp /vagrant/nginx/default.conf /etc/nginx/conf.d/default.conf
+sudo cp /vagrant/nginx/stratus.conf /etc/nginx/conf.d/stratus.conf
+sudo cp /vagrant/nginx/default.conf /etc/nginx/conf.d/default.conf.80
 sudo chmod 644 /etc/nginx/nginx.conf
 sudo chmod 644 /etc/nginx/conf.d/*
 sudo systemctl enable nginx
@@ -73,6 +74,11 @@ git config --global push.default simple
 #chmod 644 ~/.ssh/known_hosts
 #chmod 644 ~/.ssh/authorized_keys
 
+# OpenSSL -----------------------------
+sudo yum install openssl -y
+cp /vagrant/openssl/setup_ca.sh setup_ca.sh
+chmod +x setup_ca.sh
+printf "Run setup_ca.sh from /home/vagrant on vm when this setup is complete.\n"
 
 # Ansible -----------------------------
 # Install Ansible
@@ -115,3 +121,8 @@ rbenv install 2.5.1
 rbenv global 2.5.1
 rbenv rehash
 gem install bundler --no-document
+
+# Manual tasks that must be done
+printf "\n***************************************"
+printf "\nRemaining Manual tasks:"
+printf "\nRun setup_ca.sh from /home/vagrant on vm when this setup is complete.\n"

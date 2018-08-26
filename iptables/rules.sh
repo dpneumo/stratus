@@ -1,8 +1,9 @@
 #!/bin/bash
 # iptables base rules script
 
-LAN_IF=enp0s3     # 10.0.2.15
-WAN_IF=enp0s8     # 192.168.1.90
+LAN_IF=enp0s3         # 10.0.2.15
+WAN_IF=enp0s8         # 192.168.1.90 ??
+HOST="192.168.1.69"
 GHUB_IP="192.30.253.112 192.30.253.113"
 
 # Flush all current rules from iptables (ignores mangle, raw and security tables)
@@ -42,8 +43,8 @@ GHUB_IP="192.30.253.112 192.30.253.113"
 
  # WAN chains ###############################
  # HTTP Server (to world)
- iptables -A wan_in  -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
- iptables -A wan_out -p tcp --sport 80 -m state --state ESTABLISHED     -j ACCEPT
+ iptables -A wan_in  -s $HOST -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+ iptables -A wan_out -d $HOST -p tcp --sport 80 -m state --state ESTABLISHED     -j ACCEPT
 
  # HTTPS Server (to world)
  iptables -A wan_in  -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT

@@ -1,0 +1,107 @@
+#
+# OpenSSL configuration file.
+#
+HOME             = .
+dir              = $HOME/CA
+
+####################################################################
+[ ca ]
+default_ca       = CA_default
+
+[ CA_default ]
+certificate      = $dir/cacert.pem
+private_key      = $dir/private/cakey.pem
+
+certs            = $dir/newcerts
+new_certs_dir    = $certs
+database         = $dir/index.txt
+serial           = $dir/serial
+
+crl_dir          = $dir/crl
+crlnumber        = $dir/crlnumber
+crl              = $crl_dir/ca.crl
+
+RANDFILE         = $dir/private/.rand
+
+x509_extensions  = usr_cert
+copy_extensions  = copy
+nameopt          = ca_default
+certopt          = ca_default
+
+default_days     = 365
+default_crl_days = 30
+default_md       = sha512
+preserve         = no
+email_in_dn      = no
+policy           = policy_anything
+unique_subject   = no
+
+[ policy_match ]
+countryName             = match
+stateOrProvinceName     = match
+organizationName        = match
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ policy_anything ]
+countryName             = optional
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+####################################################################
+[ req ]
+default_bits        = 4096
+default_md          = sha512
+default_keyfile     = $dir/default.key
+distinguished_name  = req_distinguished_name
+attributes          = req_attributes
+req_extensions      = v3_req
+x509_extensions     = v3_ca
+string_mask         = utf8only
+
+[ req_distinguished_name ]
+countryName             = Country Name (2 letter code)
+countryName_min         = 2
+countryName_max         = 2
+stateOrProvinceName     = State or Province Name (full name)
+localityName            = Locality Name (city, district)
+0.organizationName      = Organization Name (company)
+organizationalUnitName  = Organizational Unit Name (department, division)
+commonName              = Common Name (hostname, IP, or your name)
+commonName_max          = 64
+emailAddress            = Email Address
+emailAddress_max        = 64
+
+# Default values for the above, for consistency and less typing.
+countryName_default            = US
+stateOrProvinceName_default    = New York
+localityName_default           = Metropolis
+0.organizationName_default     = The Sample Company
+organizationalUnitName_default =
+
+[ req_attributes ]
+
+[ v3_req ]
+basicConstraints        = CA:FALSE
+subjectKeyIdentifier    = hash
+subjectAltName          = email:move
+
+[ usr_cert ]
+basicConstraints        = CA:FALSE
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid,issuer
+subjectAltName          = email:move
+crlDistributionPoints   = URI:http://www.example.com/example_ca.crl
+
+[ v3_ca ]
+basicConstraints        = CA:TRUE, pathlen:3
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid:always,issuer:always
+keyUsage                = cRLSign, keyCertSign
+subjectAltName          = email:move
+crlDistributionPoints   = URI:http://www.example.com/example_ca.crl
