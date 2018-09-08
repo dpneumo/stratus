@@ -42,7 +42,7 @@ printf "========= New stratus cert with $conf =================\n"
 # Generate cert and csr
 echo "Generating csr"
 openssl req -new -newkey rsa:4096 -nodes -subj $subj \
-            -keyout CA/private/$prefix.pem \
+            -keyout CA/private/$prefix_key.pem \
             -out CA/certreqs/$prefix.csr \
             -config $conf
 # Sign cert in csr

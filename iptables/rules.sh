@@ -2,7 +2,7 @@
 # iptables base rules script
 
 LAN_IF=enp0s3         # 10.0.2.15
-WAN_IF=enp0s8         # 192.168.1.90 ??
+WAN_IF=enp0s8         # 192.168.1.98 ??
 HOST="192.168.1.69"
 GHUB_IP="192.30.253.112 192.30.253.113"
 

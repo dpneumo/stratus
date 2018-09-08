@@ -21,13 +21,13 @@ sudo yum install python2-certbot-nginx -y
 sudo yum install nginx -y
 sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.$(date +%s)
 sudo cp /vagrant/nginx/nginx.conf /etc/nginx/nginx.conf
-sudo cp /vagrant/nginx/cirrus.conf /etc/nginx/conf.d/cirrus.conf.443
 sudo cp /vagrant/nginx/stratus.conf /etc/nginx/conf.d/stratus.conf
+sudo cp /vagrant/nginx/stratus.conf /etc/nginx/conf.d/stratus.conf.443
 sudo cp /vagrant/nginx/default.conf /etc/nginx/conf.d/default.conf.80
 sudo chmod 644 /etc/nginx/nginx.conf
 sudo chmod 644 /etc/nginx/conf.d/*
 sudo systemctl enable nginx
-sudo systemctl start nginx
+# Do not start nginx yet. Need certs in place first.
 
 # Install iptables
 sudo yum install iptables-services -y
@@ -38,7 +38,7 @@ sudo chmod 644 /etc/logrotate.d/iptables
 sudo cp /vagrant/iptables/rules.sh iptables_rules.sh
 sudo chmod 755 iptables_rules.sh
 sudo touch /var/log/iptables_rules_install.log
-sudo ./iptables_rules.sh >> /var/log/iptables_rules_install.log
+sudo bash -c './iptables_rules.sh >> /var/log/iptables_rules_install.log'
 
 # Swap firewalls
 sudo systemctl stop firewalld
@@ -78,7 +78,6 @@ git config --global push.default simple
 sudo yum install openssl -y
 cp /vagrant/openssl/setup_ca.sh setup_ca.sh
 chmod +x setup_ca.sh
-printf "Run setup_ca.sh from /home/vagrant on vm when this setup is complete.\n"
 
 # Ansible -----------------------------
 # Install Ansible
@@ -123,6 +122,25 @@ rbenv rehash
 gem install bundler --no-document
 
 # Manual tasks that must be done
-printf "\n***************************************"
-printf "\nRemaining Manual tasks:"
-printf "\nRun setup_ca.sh from /home/vagrant on vm when this setup is complete.\n"
+read -r -d '' REMAINING_TASKS <<EOT
+***************************************
+Remaining Manual tasks:
+From the host: vagrant ssh
+
+1. Init app:
+    a. bundle install
+    b. bundle exec rails db:migrate
+
+2. Run setup_ca.sh from /home/vagrant on vm
+
+3. Copy certificates contained
+   in CA/cacert.pem & CA/certs/stratus.pem
+   to cirrus/config/credentials.yml.enc
+
+   Use: 'EDITOR=nano bundle exec rails credentials:edit'
+   Notice the indent used for the certificate text
+
+4. Start nginx: 'sudo systemctl start nginx'
+EOT
+
+echo "$REMAINING_TASKS"
