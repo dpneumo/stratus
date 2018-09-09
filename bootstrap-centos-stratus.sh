@@ -44,7 +44,8 @@ sudo chmod 644 /etc/logrotate.d/iptables
 sudo cp /vagrant/iptables/rules.sh iptables_rules.sh
 sudo chmod 755 iptables_rules.sh
 sudo touch /var/log/iptables_rules_install.log
-sudo bash -c './iptables_rules.sh >> /var/log/iptables_rules_install.log'
+sudo source iptables_rules.sh >> /var/log/iptables_rules_install.log
+#sudo bash -c './iptables_rules.sh >> /var/log/iptables_rules_install.log'
 
 printf "========= Swap firewalls ==========================\n"
 sudo systemctl stop firewalld

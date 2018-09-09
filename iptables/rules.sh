@@ -125,3 +125,5 @@ GHUB_IP="192.30.253.112 192.30.253.113"
  iptables -L -v --line-numbers
  printf "\n\nNAT table\n"
  iptables -t nat -L -v --line-numbers
+
+ printf "\n\nNew iptables rules installed!\n"
