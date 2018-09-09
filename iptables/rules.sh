@@ -1,5 +1,6 @@
 #!/bin/bash
 # iptables base rules script
+printf "\n========= Installing New iptables rules =========\n"
 
 LAN_IF=enp0s3         # 10.0.2.15
 WAN_IF=enp0s8         # 192.168.1.98 ??
@@ -119,11 +120,10 @@ GHUB_IP="192.30.253.112 192.30.253.113"
 # Save settings #############################
  /sbin/service iptables save
 
-
 # List rules ################################
  printf "\n\nFILTER table\n"
  iptables -L -v --line-numbers
  printf "\n\nNAT table\n"
  iptables -t nat -L -v --line-numbers
 
- printf "\n\nNew iptables rules installed!\n"
+printf "\n========= New iptables rules installed! =========\n"
