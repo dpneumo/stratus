@@ -3,21 +3,25 @@
 # Keep in mind, this is running as the vagrant user, not root!
 
 # Bring the box up to date
+sudo yum clean all
+sudo rm -rf /var/cache/yum/*
 sudo yum update -y
 
 # Install EPEL
 sudo yum install epel-release -y
 
+printf "========= Install Development tools ===============\n"
 # Development tools
 sudo yum groups mark convert "Development Tools"
 sudo yum group install -y "Development Tools"
 sudo yum install -y gettext-devel perl-CPAN perl-devel zlib-devel nano expect tcl
 
+printf "========= Install certbot (Let's Encrypt) =========\n"
 # Install certbot (Let's Encrypt)
 #sudo yum install certbot -y
 sudo yum install python2-certbot-nginx -y
 
-# Install nginx
+printf "========= Install nginx ===========================\n"
 sudo yum install nginx -y
 sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.$(date +%s)
 sudo cp /vagrant/nginx/nginx.conf /etc/nginx/nginx.conf
@@ -26,10 +30,12 @@ sudo cp /vagrant/nginx/stratus.conf /etc/nginx/conf.d/stratus.conf.443
 sudo cp /vagrant/nginx/default.conf /etc/nginx/conf.d/default.conf.80
 sudo chmod 644 /etc/nginx/nginx.conf
 sudo chmod 644 /etc/nginx/conf.d/*
+sudo touch /var/log/nginx/error.log
+sudo touch /var/log/nginx/access.log
 sudo systemctl enable nginx
 # Do not start nginx yet. Need certs in place first.
 
-# Install iptables
+printf "========= Install iptables ========================\n"
 sudo yum install iptables-services -y
 sudo cp /vagrant/iptables/rsyslog.conf /etc/rsyslog.d/20-iptables.conf
 sudo chmod 644 /etc/rsyslog.d/20-iptables.conf
@@ -40,13 +46,14 @@ sudo chmod 755 iptables_rules.sh
 sudo touch /var/log/iptables_rules_install.log
 sudo bash -c './iptables_rules.sh >> /var/log/iptables_rules_install.log'
 
-# Swap firewalls
+printf "========= Swap firewalls ==========================\n"
 sudo systemctl stop firewalld
-sudo systemctl start iptables
 sudo systemctl disable firewalld
+sudo systemctl mask firewalld
+sudo systemctl start iptables
 sudo systemctl enable iptables
 
-# Install Fail2Ban
+printf "========= Install Fail2Ban ========================\n"
 sudo yum install fail2ban -y
 sudo cp /vagrant/fail2ban/jail.local /etc/fail2ban/
 sudo cp /vagrant/fail2ban/jail.d/*.conf /etc/fail2ban/jail.d/
@@ -54,11 +61,13 @@ sudo cp /vagrant/fail2ban/filter.d/*.conf /etc/fail2ban/filter.d/
 sudo chmod 644 /etc/fail2ban/jail.local
 sudo chmod 644 /etc/fail2ban/jail.d/*
 sudo chmod 644 /etc/fail2ban/filter.d/*
-sudo rm /etc/fail2ban/jail.d/00-firewalld.conf
+if [[ -e /etc/fail2ban/00-firewalld.conf ]]; then
+  sudo rm /etc/fail2ban/jail.d/00-firewalld.conf
+fi
 sudo systemctl enable fail2ban
 sudo systemctl start fail2ban
 
-# Install Git
+printf "========= Install Git =============================\n"
 sudo yum install -y git
 
 # Fix git attributions and settings
@@ -74,13 +83,12 @@ git config --global push.default simple
 #chmod 644 ~/.ssh/known_hosts
 #chmod 644 ~/.ssh/authorized_keys
 
-# OpenSSL -----------------------------
+printf "========= Install OpenSSL =========================\n"
 sudo yum install openssl -y
 cp /vagrant/openssl/setup_ca.sh setup_ca.sh
 chmod +x setup_ca.sh
 
-# Ansible -----------------------------
-# Install Ansible
+printf "========= Install Ansible =========================\n"
 rm -Rf ~/.ansible
 git clone https://github.com/ansible/ansible.git ~/.ansible --recursive
 cd ~/.ansible
@@ -89,10 +97,10 @@ sudo easy_install pip
 sudo pip install -r ./requirements.txt
 cd ~/
 
-# Ruby --------------------------------
-# Provide a sane ruby build environment
+printf "========= Install ruby build environment ==========\n"
 sudo yum install -y bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel sqlite-devel
 
+printf "========= Install rbenv ===========================\n"
 # Install rbenv
 rm -Rf ~/.rbenv
 git clone https://github.com/rbenv/rbenv.git ~/.rbenv
@@ -115,13 +123,13 @@ eval "\$(rbenv init -)"
 EOT
 source ~/.bash_profile
 
-# Install a ruby & bundler
+printf "========= Install a ruby & bundler ================\n"
 rbenv install 2.5.1
 rbenv global 2.5.1
 rbenv rehash
 gem install bundler --no-document
 
-# Manual tasks that must be done
+printf "========= Manual tasks that must be done ==========\n"
 read -r -d '' REMAINING_TASKS <<EOT
 ***************************************
 Remaining Manual tasks:
