@@ -33,22 +33,22 @@ printf "========= Building Private CA with $conf =============\n"
 # Generate self signed CA cert.
 # Also creates and saves private key. Unencrypted!
 openssl req -new -x509 -newkey rsa:4096 -nodes -subj $casubj \
-            -keyout CA/private/cakey.pem \
-            -out CA/cacert.pem -days 3650 \
-            -config $conf -extensions v3_ca
+            -keyout 'CA/private/cakey.pem' \
+            -out 'CA/cacert.pem' -days 3650 \
+            -config $conf -extensions 'v3_ca'
 
 # Generate cert for $conf signed by our private CA
 printf "========= New stratus cert with $conf =================\n"
 # Generate cert and csr
 echo "Generating csr"
 openssl req -new -newkey rsa:4096 -nodes -subj $subj \
-            -keyout CA/private/$prefix_key.pem \
-            -out CA/certreqs/$prefix.csr \
+            -keyout 'CA/private/'$prefix'_key.pem' \
+            -out 'CA/certreqs/'$prefix'.csr' \
             -config $conf
 # Sign cert in csr
 echo "Signing cert"
-openssl ca  -in CA/certreqs/$prefix.csr \
-            -out CA/certs/$prefix.pem \
+openssl ca  -in 'CA/certreqs/'$prefix'.csr' \
+            -out 'CA/certs/'$prefix'.pem' \
             -config $conf -days 1095
 
 

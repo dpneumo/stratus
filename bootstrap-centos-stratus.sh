@@ -143,20 +143,24 @@ read -r -d '' REMAINING_TASKS <<EOT
 Remaining Manual tasks:
 From the host: vagrant ssh
 
-1. Init app:
+1. Run setup_ca.sh from /home/vagrant on vm
+
+2. cd cirrus
+
+3. Init app:
     a. bundle install
     b. bundle exec rails db:migrate
 
-2. Run setup_ca.sh from /home/vagrant on vm
+4. Start rails: 'bundle exec rails server'
 
-3. Copy certificates contained
+5. Copy certificates contained
    in CA/cacert.pem & CA/certs/stratus.pem
    to cirrus/config/credentials.yml.enc
 
    Use: 'EDITOR=nano bundle exec rails credentials:edit'
    Notice the indent used for the certificate text
 
-4. Start nginx: 'sudo systemctl start nginx'
+6. Start nginx: 'sudo systemctl start nginx'
 EOT
 
 echo "$REMAINING_TASKS"
