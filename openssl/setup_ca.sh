@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # OpenSSL -----------------------------
 mkdir -p \
   CA \
@@ -48,7 +50,7 @@ openssl req -new -newkey rsa:4096 -nodes -subj $subj \
 # Sign cert in csr
 echo "Signing cert"
 openssl ca  -in 'CA/certreqs/'$prefix'.csr' \
-            -out 'CA/certs/'$prefix'.pem' \
+            -out 'CA/certs/'$prefix'_cert.pem' \
             -config $conf -days 1095
 
 

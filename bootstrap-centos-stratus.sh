@@ -138,11 +138,17 @@ rbenv rehash
 gem install bundler --no-document
 
 printf "========= Manual tasks that must be done ==========\n"
+cp /vagrant/finalize/final_steps.sh final_steps.sh
+chmod +x final_steps.sh
+
 read -r -d '' REMAINING_TASKS <<EOT
 ***************************************
 Remaining Manual tasks:
 From the host: vagrant ssh
 
+Run final_steps.sh from /home/vagrant on vm
+
+This will:
 1. Run setup_ca.sh from /home/vagrant on vm
 
 2. cd cirrus
@@ -151,14 +157,14 @@ From the host: vagrant ssh
     a. bundle install
     b. bundle exec rails db:migrate
 
-4. Start rails: 'bundle exec rails server'
-
-5. Copy certificates contained
-   in CA/cacert.pem & CA/certs/stratus.pem
+4. Copy certificates contained
+   in CA/cacert.pem & CA/certs/stratus_cert.pem
    to cirrus/config/credentials.yml.enc
 
    Use: 'EDITOR=nano bundle exec rails credentials:edit'
    Notice the indent used for the certificate text
+
+5. Start rails: 'bundle exec rails server'
 
 6. Start nginx: 'sudo systemctl start nginx'
 EOT
