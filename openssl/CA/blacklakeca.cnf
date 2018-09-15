@@ -79,23 +79,24 @@ emailAddress_max        = 64
 
 # Default values for the above, for consistency and less typing.
 countryName_default            = US
-stateOrProvinceName_default    = New York
-localityName_default           = Metropolis
-0.organizationName_default     = The Sample Company
-organizationalUnitName_default =
+stateOrProvinceName_default    = Texas
+localityName_default           = Arlington
+0.organizationName_default     = BlackLakeSoftware
+organizationalUnitName_default = Applications
+emailAddress                   = dpneumo@gmail.com
 
 [ req_attributes ]
 
 [ v3_req ]
 basicConstraints        = CA:FALSE
 subjectKeyIdentifier    = hash
-subjectAltName          = email:move
+subjectAltName          = ${ENV::SAN}
 
 [ usr_cert ]
 basicConstraints        = CA:FALSE
 subjectKeyIdentifier    = hash
 authorityKeyIdentifier  = keyid,issuer
-subjectAltName          = email:move
+subjectAltName          = ${ENV::SAN}
 crlDistributionPoints   = URI:http://www.example.com/example_ca.crl
 
 [ v3_ca ]

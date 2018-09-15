@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
                           inline: <<-SHELL
       sudo sed -i 's/DEFROUTE="yes"/DEFROUTE="no"/g' /etc/sysconfig/network-scripts/ifcfg-enp0s3
       sudo systemctl restart network
-      ifconfig enp0s8 | grep 'inet ' | awk '{print $2}' | xargs -I IPADDR echo "The bridged IP is IPADDR"
+      ip route get 8.8.8.8 | awk '{print $7}' | xargs -I IPADDR echo "The bridged IP is IPADDR"
       netstat -rn
     SHELL
     stratus.vm.provision  :shell,
@@ -41,3 +41,4 @@ Vagrant.configure("2") do |config|
 
 end
 
+$(ip route get 8.8.8.8 | awk '{print $7}')

@@ -83,13 +83,14 @@ git config --global user.name "Mitch Kuppinger"
 git config --global user.email dpneumo@gmail.com
 git config --global push.default simple
 
-# Restore original keypair and set appropriate permissions
-#cp /vagrant/.ssh/id_rsa* ~/.ssh/
-#cp /vagrant/.ssh/known_hosts ~/.ssh/
-#chmod 600 ~/.ssh/id_rsa
-#chmod 644 ~/.ssh/id_rsa.pub
-#chmod 644 ~/.ssh/known_hosts
-#chmod 644 ~/.ssh/authorized_keys
+printf "========= ssh files ===============================\n"
+cp /vagrant/.ssh/id_rsa* ~/.ssh/
+touch ~/.ssh/known_hosts
+touch ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/id_rsa
+chmod 644 ~/.ssh/id_rsa.pub
+chmod 644 ~/.ssh/known_hosts
+chmod 644 ~/.ssh/authorized_keys
 
 printf "========= Install OpenSSL =========================\n"
 sudo yum install openssl -y
@@ -144,29 +145,17 @@ chmod +x final_steps.sh
 read -r -d '' REMAINING_TASKS <<EOT
 ***************************************
 Remaining Manual tasks:
-From the host: vagrant ssh
+From the host:
+  vagrant ssh
 
-Run final_steps.sh from /home/vagrant on vm
+From /home/vagrant on vm:
+  subj=stratus ./final_steps.sh
 
 This will:
 1. Run setup_ca.sh from /home/vagrant on vm
-
-2. cd cirrus
-
-3. Init app:
-    a. bundle install
-    b. bundle exec rails db:migrate
-
-4. Copy certificates contained
-   in CA/cacert.pem & CA/certs/stratus_cert.pem
-   to cirrus/config/credentials.yml.enc
-
-   Use: 'EDITOR=nano bundle exec rails credentials:edit'
-   Notice the indent used for the certificate text
-
-5. Start rails: 'bundle exec rails server'
-
-6. Start nginx: 'sudo systemctl start nginx'
+2. Copy certs from CA/ to cirrus/config/certs/
+3. (Re)start nginx
+4. Start the Rails app
 EOT
 
 echo "$REMAINING_TASKS"

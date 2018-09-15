@@ -10,8 +10,12 @@ mkdir -p \
   CA/private
 chmod 700 CA/private
 touch CA/index.txt
-echo '01' > CA/serial
-echo '01' > CA/crlnumber
+if [[ ! -e 'CA/serial' ]]; then
+  echo '01' > CA/serial
+fi
+if [[ ! -e 'CA/crlnumber' ]]; then
+  echo '01' > CA/crlnumber
+fi
 
 cat <<EOT >> ~/.bash_profile
 # useful openssl aliases
@@ -21,36 +25,38 @@ alias crl='openssl crl -noout -text -in'
 EOT
 source ~/.bash_profile
 
-export casubj="/CN=blacklakeca"
-export prefix=stratus
-export subj="/CN=$prefix"
-export conf=CA/$prefix.cnf
+export subject=$SUBJ
+export servsubj=/CN=$subject
+export ca=blacklakeca
+export casubj=/CN=$ca
+export caconf=CA/$ca.cnf
 
-cp /vagrant/openssl/$conf $conf
-chmod 644 $conf
+cp /vagrant/openssl/$caconf $caconf
+chmod 644 $caconf
 ls -lst CA
 
 # Private CA
-printf "========= Building Private CA with $conf =============\n"
-# Generate self signed CA cert.
+printf "========= Building Private CA with $caconf ==========\n"
+# Generate self signed CA cert if it does not yet exist.
 # Also creates and saves private key. Unencrypted!
-openssl req -new -x509 -newkey rsa:4096 -nodes -subj $casubj \
-            -keyout 'CA/private/cakey.pem' \
-            -out 'CA/cacert.pem' -days 3650 \
-            -config $conf -extensions 'v3_ca'
-
-# Generate cert for $conf signed by our private CA
-printf "========= New stratus cert with $conf =================\n"
+if [[ ! -e CA/private/cakey.pem ]]; then
+  openssl req -new -x509 -newkey rsa:4096 -nodes -subj $casubj \
+              -keyout 'CA/private/cakey.pem' \
+              -out 'CA/cacert.pem' -days 3650 \
+              -config $caconf -extensions 'v3_ca'
+fi
+# Generate cert for $subject signed by our private CA
+printf "========= New $subject cert using $caconf ===========\n"
 # Generate cert and csr
 echo "Generating csr"
-openssl req -new -newkey rsa:4096 -nodes -subj $subj \
-            -keyout 'CA/private/'$prefix'_key.pem' \
-            -out 'CA/certreqs/'$prefix'.csr' \
-            -config $conf
+openssl req -new -newkey rsa:4096 -nodes -subj $servsubj \
+            -keyout 'CA/private/'$subject'_key.pem' \
+            -out 'CA/certreqs/'$subject'.csr' \
+            -config $caconf
 # Sign cert in csr
 echo "Signing cert"
-openssl ca  -in 'CA/certreqs/'$prefix'.csr' \
-            -out 'CA/certs/'$prefix'_cert.pem' \
-            -config $conf -days 1095
+openssl ca  -in 'CA/certreqs/'$subject'.csr' \
+            -out 'CA/certs/'$subject'_cert.pem' \
+            -config $caconf -days 1095 -notext
 
 
