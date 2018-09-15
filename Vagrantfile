@@ -40,5 +40,3 @@ Vagrant.configure("2") do |config|
   end
 
 end
-
-$(ip route get 8.8.8.8 | awk '{print $7}')
