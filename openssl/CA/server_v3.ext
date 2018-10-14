@@ -1,0 +1,12 @@
+basicConstraints       = CA:FALSE
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName         = @alt_names
+
+[alt_names]
+DNS.1 = stratus.attlocal.net
+DNS.2 = stratus
+DNS.3 = blacklakesoftware.com
+IP.1  = 99.61.131.56
+IP.2  = ${ENV::SUBJ_IP}

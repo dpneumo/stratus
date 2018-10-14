@@ -90,14 +90,13 @@ emailAddress                   = dpneumo@gmail.com
 [ v3_req ]
 basicConstraints        = CA:FALSE
 subjectKeyIdentifier    = hash
-subjectAltName          = ${ENV::SAN}
 
 [ usr_cert ]
-basicConstraints        = CA:FALSE
-subjectKeyIdentifier    = hash
-authorityKeyIdentifier  = keyid,issuer
-subjectAltName          = ${ENV::SAN}
-crlDistributionPoints   = URI:http://www.example.com/example_ca.crl
+basicConstraints       = CA:FALSE
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName         = blacklakesoftware.com
 
 [ v3_ca ]
 basicConstraints        = CA:TRUE, pathlen:3
@@ -105,4 +104,3 @@ subjectKeyIdentifier    = hash
 authorityKeyIdentifier  = keyid:always,issuer:always
 keyUsage                = cRLSign, keyCertSign
 subjectAltName          = email:move
-crlDistributionPoints   = URI:http://www.example.com/example_ca.crl

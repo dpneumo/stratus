@@ -3,7 +3,7 @@
 printf "\n========= Installing New iptables rules =========\n"
 
 LAN_IF=enp0s3         # 10.0.2.15
-WAN_IF=enp0s8         # 192.168.1.98 ??
+WAN_IF=enp0s8         # 192.168.1.114 ??
 HOST="192.168.1.69"
 GHUB_IP="192.30.253.112 192.30.253.113"
 
@@ -44,12 +44,15 @@ GHUB_IP="192.30.253.112 192.30.253.113"
 
  # WAN chains ###############################
  # HTTP Server (to world)
- iptables -A wan_in  -s $HOST -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
- iptables -A wan_out -d $HOST -p tcp --sport 80 -m state --state ESTABLISHED     -j ACCEPT
+ #iptables -A wan_in  -p tcp --dport 3000 -m state --state NEW,ESTABLISHED -j ACCEPT
+ #iptables -A wan_out -p tcp --sport 3000 -m state --state ESTABLISHED     -j ACCEPT
+
+ iptables -A wan_in  -p tcp --dport   80 -m state --state NEW,ESTABLISHED -j ACCEPT
+ iptables -A wan_out -p tcp --sport   80 -m state --state ESTABLISHED     -j ACCEPT
 
  # HTTPS Server (to world)
- iptables -A wan_in  -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
- iptables -A wan_out -p tcp --sport 443 -m state --state ESTABLISHED     -j ACCEPT
+ iptables -A wan_in  -p tcp --dport  443 -m state --state NEW,ESTABLISHED -j ACCEPT
+ iptables -A wan_out -p tcp --sport  443 -m state --state ESTABLISHED     -j ACCEPT
 
  # SSH Client (Github)
  for IP in $GHUB_IP; do
@@ -58,18 +61,18 @@ GHUB_IP="192.30.253.112 192.30.253.113"
  done
 
  # HTTP Client (YUM)
- iptables -A wan_in  -p tcp --sport 80  -m state --state ESTABLISHED     -j ACCEPT
- iptables -A wan_out -p tcp --dport 80  -m state --state NEW,ESTABLISHED -j ACCEPT
+ iptables -A wan_in  -p tcp --sport  80  -m state --state ESTABLISHED     -j ACCEPT
+ iptables -A wan_out -p tcp --dport  80  -m state --state NEW,ESTABLISHED -j ACCEPT
 
  # HTTPS Client (YUM, Git)
  iptables -A wan_in  -p tcp --sport 443 -m state --state ESTABLISHED     -j ACCEPT
  iptables -A wan_out -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
 
  # DNS Client
- iptables -A wan_in  -p tcp --sport 53 -m state --state ESTABLISHED     -j ACCEPT
- iptables -A wan_out -p tcp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
- iptables -A wan_in  -p udp --sport 53 -m state --state ESTABLISHED     -j ACCEPT
- iptables -A wan_out -p udp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+ iptables -A wan_in  -p tcp --sport  53 -m state --state ESTABLISHED     -j ACCEPT
+ iptables -A wan_out -p tcp --dport  53 -m state --state NEW,ESTABLISHED -j ACCEPT
+ iptables -A wan_in  -p udp --sport  53 -m state --state ESTABLISHED     -j ACCEPT
+ iptables -A wan_out -p udp --dport  53 -m state --state NEW,ESTABLISHED -j ACCEPT
 
  # DHCP Client
  iptables -A wan_in  -p udp --sport 67:68 -m state --state ESTABLISHED     -j ACCEPT
@@ -91,9 +94,13 @@ GHUB_IP="192.30.253.112 192.30.253.113"
 
 
  # LAN chains ###############################
+ # HTTP Server (to local)
+ #iptables -A lan_in  -p tcp --dport 3000 -m state --state NEW,ESTABLISHED -j ACCEPT
+ #iptables -A lan_out -p tcp --sport 3000 -m state --state ESTABLISHED     -j ACCEPT
+
  # SSH Server
- iptables -A lan_in  -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
- iptables -A lan_out -p tcp --sport 22 -m state --state ESTABLISHED     -j ACCEPT
+ iptables -A lan_in  -p tcp --dport   22 -m state --state NEW,ESTABLISHED -j ACCEPT
+ iptables -A lan_out -p tcp --sport   22 -m state --state ESTABLISHED     -j ACCEPT
 
  # ICMP inbound
  iptables -A lan_in  -p icmp -m icmp --icmp-type echo-request -m limit --limit 1/sec -j ACCEPT
@@ -111,6 +118,7 @@ GHUB_IP="192.30.253.112 192.30.253.113"
 
 
 # logging chain #############################
+ iptables -A logging -p udp                         -j DROP
  iptables -A logging -p icmp                        -j DROP
  iptables -A logging -m state --state INVALID       -j DROP
  iptables -A logging -m limit --limit 2/min --limit-burst 10 \
@@ -122,8 +130,8 @@ GHUB_IP="192.30.253.112 192.30.253.113"
 
 # List rules ################################
  printf "\n\nFILTER table\n"
- iptables -L -v --line-numbers
+ iptables -L -v -n --line-numbers
  printf "\n\nNAT table\n"
- iptables -t nat -L -v --line-numbers
+ iptables -t nat -L -v -n --line-numbers
 
 printf "\n========= New iptables rules installed! =========\n"

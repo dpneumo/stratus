@@ -3,12 +3,14 @@
 cd /home/vagrant
 
 ipaddr=$(ip route get 8.8.8.8 | awk '{print $7}')
-SUBJ=$subj SAN=DNS:$subj,IP:$ipaddr ./setup_ca.sh
+SUBJ=$subj SUBJ_IP=$ipaddr ./setup_ca.sh
+
 subjcert=${subj}_cert.pem
-if [[ -e cirrus/config/certs ]]; then
-  cp CA/cacert.pem cirrus/config/certs/cacert.pem
-  cp CA/certs/stratus_cert.pem cirrus/config/certs/$subjcert
-fi
+
+mkdir -p cirrus/config/certs
+cp CA/cacert.pem  cirrus/config/certs/cacert.pem
+cp CA/certs/stratus_cert.pem  cirrus/config/certs/$subjcert
+
 sudo systemctl restart nginx
 
 printf "\n========= cirrus/config/certs/cacert.pem ==========\n\n"

@@ -26,8 +26,6 @@ sudo yum install nginx -y
 sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.$(date +%s)
 sudo cp /vagrant/nginx/nginx.conf /etc/nginx/nginx.conf
 sudo cp /vagrant/nginx/stratus.conf /etc/nginx/conf.d/stratus.conf
-sudo cp /vagrant/nginx/stratus.conf /etc/nginx/conf.d/stratus.conf.443
-sudo cp /vagrant/nginx/default.conf /etc/nginx/conf.d/default.conf.80
 sudo chmod 644 /etc/nginx/nginx.conf
 sudo chmod 644 /etc/nginx/conf.d/*
 sudo touch /var/log/nginx/error.log
@@ -84,11 +82,11 @@ git config --global user.email dpneumo@gmail.com
 git config --global push.default simple
 
 printf "========= ssh files ===============================\n"
-cp /vagrant/.ssh/id_rsa* ~/.ssh/
-touch ~/.ssh/known_hosts
-touch ~/.ssh/authorized_keys
+ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
 chmod 600 ~/.ssh/id_rsa
 chmod 644 ~/.ssh/id_rsa.pub
+touch ~/.ssh/known_hosts
+touch ~/.ssh/authorized_keys
 chmod 644 ~/.ssh/known_hosts
 chmod 644 ~/.ssh/authorized_keys
 
@@ -146,16 +144,24 @@ read -r -d '' REMAINING_TASKS <<EOT
 ***************************************
 Remaining Manual tasks:
 From the host:
-  vagrant ssh
+  $vagrant ssh
 
 From /home/vagrant on vm:
-  subj=stratus ./final_steps.sh
+  $subj=stratus ./final_steps.sh
 
 This will:
 1. Run setup_ca.sh from /home/vagrant on vm
 2. Copy certs from CA/ to cirrus/config/certs/
 3. (Re)start nginx
 4. Start the Rails app
+
+Add cacert.pem to trusted root certs:
+  - Windows:
+      1. Chrome and IE
+            Use mmc (Start > mmc > enter)
+      2. Firefox
+            Options > Privacy and Security > View Certificates >
+            Authorities tab > Import > cirrus/config/certs/cacert.pem
 EOT
 
 echo "$REMAINING_TASKS"

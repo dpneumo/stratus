@@ -25,38 +25,45 @@ alias crl='openssl crl -noout -text -in'
 EOT
 source ~/.bash_profile
 
-export subject=$SUBJ
-export servsubj=/CN=$subject
+cd CA
 export ca=blacklakeca
-export casubj=/CN=$ca
-export caconf=CA/$ca.cnf
+export DNdflts="/C=US/ST=Texas/L=Arlington/O=BlackLakeSoftware/OU=Applications"
+export casubj="/CN=$ca$DNdflts/emailAddress=dpneumo@gmail.com"
+export caconf=$ca.cnf
+export subject=$SUBJ
 
-cp /vagrant/openssl/$caconf $caconf
-chmod 644 $caconf
-ls -lst CA
+cp /vagrant/openssl/CA/$caconf $caconf
+cp /vagrant/openssl/CA/server.csr.cnf server.csr.cnf
+cp /vagrant/openssl/CA/server_v3.ext server_v3.ext
+chmod 644 *.cnf
+chmod 644 *.ext
 
 # Private CA
 printf "========= Building Private CA with $caconf ==========\n"
 # Generate self signed CA cert if it does not yet exist.
 # Also creates and saves private key. Unencrypted!
-if [[ ! -e CA/private/cakey.pem ]]; then
-  openssl req -new -x509 -newkey rsa:4096 -nodes -subj $casubj \
-              -keyout 'CA/private/cakey.pem' \
-              -out 'CA/cacert.pem' -days 3650 \
+if [[ ! -e private/cakey.pem ]]; then
+  openssl req -new -x509 -newkey rsa:4096 -nodes -days 3650 \
+              -subj $casubj \
+              -keyout 'private/cakey.pem' \
+              -out 'cacert.pem' \
               -config $caconf -extensions 'v3_ca'
 fi
+
 # Generate cert for $subject signed by our private CA
 printf "========= New $subject cert using $caconf ===========\n"
-# Generate cert and csr
-echo "Generating csr"
-openssl req -new -newkey rsa:4096 -nodes -subj $servsubj \
-            -keyout 'CA/private/'$subject'_key.pem' \
-            -out 'CA/certreqs/'$subject'.csr' \
-            -config $caconf
-# Sign cert in csr
-echo "Signing cert"
-openssl ca  -in 'CA/certreqs/'$subject'.csr' \
-            -out 'CA/certs/'$subject'_cert.pem' \
-            -config $caconf -days 1095 -notext
+# Generate csr
+openssl req -new -nodes \
+            -keyout 'private/'$subject'_key.pem' \
+            -out 'certreqs/'$subject'.csr' \
+            -config server.csr.cnf
 
+# Generate the certificate
+openssl x509 -req \
+             -in 'certreqs/'$subject'.csr' \
+             -out 'certs/'$subject'_cert.pem' \
+             -CA 'cacert.pem' \
+             -CAkey 'private/cakey.pem' \
+             -days 1095 -extfile 'server_v3.ext' \
+             -CAcreateserial
 
