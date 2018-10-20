@@ -2,6 +2,7 @@
 #
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+require_relative 'bridged_interfaces'
 
 Vagrant.configure("2") do |config|
 
@@ -20,8 +21,7 @@ Vagrant.configure("2") do |config|
                               "/home/vagrant/cummulus",
                               mount_options: ["dmode=755", "fmode=644"]
     stratus.vm.network "forwarded_port", guest: 3000, host: 3000
-    # config.vm.network "public_network", bridge: "host_controller_name - see README"
-    stratus.vm.network "public_network", bridge: "Realtek PCIe FE Family Controller"
+    stratus.vm.network "public_network", bridge: BridgedInterfaces.preferred['Name']
     stratus.vm.boot_timeout = 1200
     stratus.vm.provider "virtualbox" do |vb|
       vb.memory = "256"
