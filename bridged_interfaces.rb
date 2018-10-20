@@ -1,10 +1,4 @@
 class BridgedInterfaces
-  def initialize( print_output: false )
-    @cmd = 'VBoxManage.exe list bridgedifs'
-    @directory = 'C:\Program Files\Oracle\VirtualBox'
-    @print_output = print_output
-  end
-
   def self.preferred
     new
     .bridged_ifcs
@@ -12,42 +6,55 @@ class BridgedInterfaces
     .first
   end
 
-  def bridged_ifcs
-    @bridged_ifcs || bridged_ifc_list
-  end
-
   private
+    def initialize( print_output: false )
+      @cmd = 'VBoxManage.exe list bridgedifs'
+      @directory = 'C:\Program Files\Oracle\VirtualBox'
+      @print_output = print_output
+    end
+
+    def bridged_ifcs
+      @bridged_ifcs || bridged_ifc_list
+    end
+
     def bridged_ifc_list
-      list = run_command
+      list = runcmd
       last_key, _ = list[-2].split(':')
-      bifs, ifc = [], {}
+      bifcs, ifc = [], {}
       list.each do |item|
-        next if item.empty?
-        k, v = item.split(':')
-        ifc[k] = v.strip
+        item = clean(item)
+        next if item.nil?
+        k, v = components(item)
+        ifc[k] = v
         if k == last_key
-          bifs << ifc if usable(ifc)
+          bifcs << ifc if usable(ifc)
           ifc = {}
         end
       end
-      bifs
+      bifcs
     end
 
-    def run_command
+    def runcmd
       out = IO.popen(@cmd, err: %i[child out], chdir: @directory) do |io|
-        begin
-          out = ''
-          loop do
-            chunk = io.readpartial(4096)
-            print chunk if @print_output
-            out += chunk
-          end
-        rescue EOFError; end
-        out
+        io.readlines
       end
-      $?.exitstatus.zero? || (raise "Error running command #{@cmd}")
-      out.split("\n")
-         .map { |line| line.tr("\r\n", '') }
+      raise "Error running command #{@cmd}" unless $?.exitstatus.zero?
+      print out if @print_output
+      out
+    end
+
+    def clean(item)
+      return nil unless item
+      item = item.chomp
+      return nil unless item
+      item = item.strip
+      return nil if item.empty?
+      item
+    end
+
+    def components(item)
+      k, v = item.split(':')
+      [ k, (v || "nil").strip ]
     end
 
     def usable(ifc)
