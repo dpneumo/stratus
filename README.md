@@ -28,12 +28,12 @@ bundle exec rails server
 # to get host adaptor names for use in Vagrantfile:
 ```
 # In unix-like terminal (eg MINGW64):
-/c/Program Files/Oracle/VirtualBox
+cd '/c/Program Files/Oracle/VirtualBox'
 VBoxManage.exe list bridgedifs | grep ^Name
 ```
 
 ```
 # In Windows PowerShell:
-cd C:\Program Files\Oracle\VirtualBox
+cd "C:\Program Files\Oracle\VirtualBox"
 .\VBoxManage.exe list bridgedifs | Select-String -Pattern "^Name:*"
 ```
