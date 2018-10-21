@@ -6,15 +6,15 @@ class BridgedInterfaces
     .first
   end
 
+  def bridged_ifcs
+    @bridged_ifcs || bridged_ifc_list
+  end
+
   private
     def initialize( print_output: false )
       @cmd = 'VBoxManage.exe list bridgedifs'
       @directory = 'C:\Program Files\Oracle\VirtualBox'
       @print_output = print_output
-    end
-
-    def bridged_ifcs
-      @bridged_ifcs || bridged_ifc_list
     end
 
     def bridged_ifc_list
