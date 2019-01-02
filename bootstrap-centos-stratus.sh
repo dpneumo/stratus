@@ -104,6 +104,40 @@ sudo easy_install pip
 sudo pip install -r ./requirements.txt
 cd ~/
 
+printf "========= Install Redis ===========================\n"
+wget -c http://download.redis.io/redis-stable.tar.gz
+tar -xvzf redis-stable.tar.gz
+cd redis-stable
+make
+make test
+sudo make install
+
+sudo mkdir /etc/redis
+sudo cp /vagrant/redis/redis_*.conf /etc/redis/
+sudo chown redis:redis /etc/redis/*
+sudo chmod 644 /etc/redis/*
+
+sudo adduser --system --no-create-home redis
+
+sudo mkdir -p /var/redis/redis_sidekiq
+sudo chown redis:redis /var/redis/redis_sidekiq
+sudo chmod 770 /var/redis/redis_sidekiq
+
+sudo mkdir -p /var/redis/redis_cache
+sudo chown redis:redis /var/redis/redis_cache
+sudo chmod 770 /var/redis/redis_cache
+
+sudo cp /vagrant/redis/40-redis.conf /usr/lib/sysctl.d/
+sudo chmod 644 /usr/lib/sysctl.d/40-redis.conf
+sudo sysctl vm.overcommit_memory=1
+
+sudo cp /vagrant/redis/*.service /etc/systemd/system/
+sudo systemctl start redis_sidekiq
+sudo systemctl enable redis_sidekiq
+sudo systemctl start redis_cache
+sudo systemctl enable redis_cache
+cd ~/
+
 printf "========= Install ruby build environment ==========\n"
 sudo yum install -y bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel sqlite-devel
 

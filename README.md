@@ -37,3 +37,6 @@ VBoxManage.exe list bridgedifs | grep ^Name
 cd "C:\Program Files\Oracle\VirtualBox"
 .\VBoxManage.exe list bridgedifs | Select-String -Pattern "^Name:*"
 ```
+
+redis-cli info:  redis.io/topics/rediscli
+redis setup Gist: gist.github.com/dpneumo/74a184eb67922492230fcb65786f199b
