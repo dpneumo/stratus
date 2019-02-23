@@ -1,0 +1,50 @@
+[
+"Name:            Realtek PCIe FE Family Controller",
+"GUID:            6157c7b4-64e5-44fe-b367-84309e5bbaf0",
+"DHCP:            Enabled",
+"IPAddress:       192.168.1.69",
+"NetworkMask:     255.255.255.0",
+"IPV6Address:", "IPV6NetworkMaskPrefixLength: 0",
+"HardwareAddress: f0:de:f1:c6:03:00",
+"MediumType:      Ethernet",
+"Wireless:        No",
+"Status:          Up",
+"VBoxNetworkName: HostInterfaceNetworking-Realtek PCIe FE Family Controller",
+nil,
+"Name:            TAP-Windows Adapter V9",
+"GUID:            0d385a08-eca7-4f90-a879-9346a5aa3331",
+"DHCP:            Enabled",
+"IPAddress:       169.254.255.209",
+"NetworkMask:     255.255.0.0",
+"IPV6Address:",
+"IPV6NetworkMaskPrefixLength: 0",
+"HardwareAddress: 00:ff:0d:38:5a:08",
+"MediumType:
+Ethernet", "Wireless:        No",
+"Status:          Down",
+"VBoxNetworkName: HostInterfaceNetworking-TAP-Windows Adapter V9",
+nil
+]
+
+#<Enumerator: #<Enumerator::Generator:0x000000000494a5a8>:each>
+
+[
+  ["Name", "Realtek PCIe FE Family Controller"],
+  ["GUID", "6157c7b4-64e5-44fe-b367-84309e5bbaf0"],
+  ["DHCP", "Enabled"],
+  ["IPAddress", "192.168.1.69"],
+  ["NetworkMask", "255.255.255.0"],
+  ["IPV6Address", nil],
+  ["IPV6NetworkMaskPrefixLength", "0"],
+  ["HardwareAddress", "f0"],
+  ["MediumType", "Ethernet"],
+  ["Wireless", "No"],
+  ["Status", "Up"],
+  ["VBoxNetworkName", "HostInterfaceNetworking-Realtek PCIe FE Family Controller"]
+]
+
+[nil]
+
+
+
+["Name", "Realtek PCIe FE Family Controller", "GUID", "6157c7b4-64e5-44fe-b367-84309e5bbaf0", "DHCP", "Enabled", "IPAddress", "192.168.1.69", "NetworkMask", "255.255.255.0", "IPV6Address", nil, "IPV6NetworkMaskPrefixLength", "0", "HardwareAddress", "f0", "MediumType", "Ethernet", "Wireless", "No", "Status", "Up", "VBoxNetworkName", "HostInterfaceNetworking-Realtek PCIe FE Family Controller"]

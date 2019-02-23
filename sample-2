@@ -1,0 +1,164 @@
+===========================
+WiFi Up, Wired disabled
+
+Name:            Intel(R) WiFi Link 1000 BGN
+GUID:            8f431c89-a522-4490-9946-62fd34a9d359
+DHCP:            Enabled
+IPAddress:       192.168.1.84
+NetworkMask:     255.255.255.0
+IPV6Address:     fe80::e85e:3baf:3809:321
+IPV6NetworkMaskPrefixLength: 64
+HardwareAddress: 74:e5:0b:b4:a9:16
+MediumType:      Ethernet
+Wireless:        Yes
+Status:          Up
+VBoxNetworkName: HostInterfaceNetworking-Intel(R) WiFi Link 1000 BGN
+
+Name:            Realtek PCIe FE Family Controller
+GUID:            6157c7b4-64e5-44fe-b367-84309e5bbaf0
+DHCP:            Enabled
+IPAddress:       169.254.44.70
+NetworkMask:     255.255.0.0
+IPV6Address:
+IPV6NetworkMaskPrefixLength: 0
+HardwareAddress: f0:de:f1:c6:03:00
+MediumType:      Ethernet
+Wireless:        No
+Status:          Down
+VBoxNetworkName: HostInterfaceNetworking-Realtek PCIe FE Family Controller
+
+Name:            TAP-Windows Adapter V9
+GUID:            0d385a08-eca7-4f90-a879-9346a5aa3331
+DHCP:            Enabled
+IPAddress:       169.254.255.209
+NetworkMask:     255.255.0.0
+IPV6Address:
+IPV6NetworkMaskPrefixLength: 0
+HardwareAddress: 00:ff:0d:38:5a:08
+MediumType:      Ethernet
+Wireless:        No
+Status:          Down
+VBoxNetworkName: HostInterfaceNetworking-TAP-Windows Adapter V9
+
+==========================
+WiFi up, Wired enabled but disconnected
+
+Name:            Intel(R) WiFi Link 1000 BGN
+GUID:            8f431c89-a522-4490-9946-62fd34a9d359
+DHCP:            Enabled
+IPAddress:       192.168.1.84
+NetworkMask:     255.255.255.0
+IPV6Address:     fe80::e85e:3baf:3809:321
+IPV6NetworkMaskPrefixLength: 64
+HardwareAddress: 74:e5:0b:b4:a9:16
+MediumType:      Ethernet
+Wireless:        Yes
+Status:          Up
+VBoxNetworkName: HostInterfaceNetworking-Intel(R) WiFi Link 1000 BGN
+
+Name:            Realtek PCIe FE Family Controller
+GUID:            6157c7b4-64e5-44fe-b367-84309e5bbaf0
+DHCP:            Enabled
+IPAddress:       192.168.1.69
+NetworkMask:     255.255.255.0
+IPV6Address:
+IPV6NetworkMaskPrefixLength: 0
+HardwareAddress: f0:de:f1:c6:03:00
+MediumType:      Ethernet
+Wireless:        No
+Status:          Up
+VBoxNetworkName: HostInterfaceNetworking-Realtek PCIe FE Family Controller
+
+Name:            TAP-Windows Adapter V9
+GUID:            0d385a08-eca7-4f90-a879-9346a5aa3331
+DHCP:            Enabled
+IPAddress:       169.254.255.209
+NetworkMask:     255.255.0.0
+IPV6Address:
+IPV6NetworkMaskPrefixLength: 0
+HardwareAddress: 00:ff:0d:38:5a:08
+MediumType:      Ethernet
+Wireless:        No
+Status:          Down
+VBoxNetworkName: HostInterfaceNetworking-TAP-Windows Adapter V9
+
+===========================
+WiFi up, Wired enabled & connected
+
+Name:            Intel(R) WiFi Link 1000 BGN
+GUID:            8f431c89-a522-4490-9946-62fd34a9d359
+DHCP:            Enabled
+IPAddress:       192.168.1.84
+NetworkMask:     255.255.255.0
+IPV6Address:     fe80::e85e:3baf:3809:321
+IPV6NetworkMaskPrefixLength: 64
+HardwareAddress: 74:e5:0b:b4:a9:16
+MediumType:      Ethernet
+Wireless:        Yes
+Status:          Up
+VBoxNetworkName: HostInterfaceNetworking-Intel(R) WiFi Link 1000 BGN
+
+Name:            Realtek PCIe FE Family Controller
+GUID:            6157c7b4-64e5-44fe-b367-84309e5bbaf0
+DHCP:            Enabled
+IPAddress:       192.168.1.69
+NetworkMask:     255.255.255.0
+IPV6Address:
+IPV6NetworkMaskPrefixLength: 0
+HardwareAddress: f0:de:f1:c6:03:00
+MediumType:      Ethernet
+Wireless:        No
+Status:          Up
+VBoxNetworkName: HostInterfaceNetworking-Realtek PCIe FE Family Controller
+
+Name:            TAP-Windows Adapter V9
+GUID:            0d385a08-eca7-4f90-a879-9346a5aa3331
+DHCP:            Enabled
+IPAddress:       169.254.255.209
+NetworkMask:     255.255.0.0
+IPV6Address:
+IPV6NetworkMaskPrefixLength: 0
+HardwareAddress: 00:ff:0d:38:5a:08
+MediumType:      Ethernet
+Wireless:        No
+Status:          Down
+VBoxNetworkName: HostInterfaceNetworking-TAP-Windows Adapter V9
+
+===========================
+WiFi down, Wired enabled, connected
+
+Name:            Realtek PCIe FE Family Controller
+GUID:            6157c7b4-64e5-44fe-b367-84309e5bbaf0
+DHCP:            Enabled
+IPAddress:       192.168.1.69
+NetworkMask:     255.255.255.0
+IPV6Address:
+IPV6NetworkMaskPrefixLength: 0
+HardwareAddress: f0:de:f1:c6:03:00
+MediumType:      Ethernet
+Wireless:        No
+Status:          Up
+VBoxNetworkName: HostInterfaceNetworking-Realtek PCIe FE Family Controller
+
+Name:            TAP-Windows Adapter V9
+GUID:            0d385a08-eca7-4f90-a879-9346a5aa3331
+DHCP:            Enabled
+IPAddress:       169.254.255.209
+NetworkMask:     255.255.0.0
+IPV6Address:
+IPV6NetworkMaskPrefixLength: 0
+HardwareAddress: 00:ff:0d:38:5a:08
+MediumType:      Ethernet
+Wireless:        No
+Status:          Down
+VBoxNetworkName: HostInterfaceNetworking-TAP-Windows Adapter V9
+
+suspend completes without problem
+resume triggers this:
+There was an error while executing `VBoxManage`, a CLI used by Vagrant
+for controlling VirtualBox. The command and stderr is shown below.
+
+Command: ["startvm", "494a433b-6f19-4699-80f1-6bab5dc2b69f", "--type", "headless"]
+
+Stderr: VBoxManage.exe: error: Nonexistent host networking interface, name 'Intel(R) WiFi Link 1000 BGN' (VERR_INTERNAL_ERROR)
+VBoxManage.exe: error: Details: code E_FAIL (0x80004005), component ConsoleWrap, interface IConsole
