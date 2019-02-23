@@ -1,60 +1,47 @@
+require_relative 'interface_parm_list'
 class BridgedInterfaces
-  def self.preferred
-    new
-    .bridged_ifcs
-    .sort_by {|ifc| ifc['Wireless'] }
-    .first
+  IFCNOTAVAIL = <<-MSG
+    WARNING:
+      No available bridged interface.
+      Check that an interface is enabled and connected to the network.\n
+  MSG
+
+  def initialize(interface_attr: InterfaceAttr)
+    @ifc_attr = interface_attr.new
   end
 
-  def bridged_ifcs
-    @bridged_ifcs || bridged_ifc_list
+  def preferred
+    preferred_bridged_ifc
+    .sort_by {|ifc| ifc['Wireless'] }
+    .first
+    .tap {|ifc| puts IFCNOTAVAIL if ifc.nil? }
   end
 
   private
-    def initialize( print_output: false )
-      @cmd = 'VBoxManage.exe list bridgedifs'
-      @directory = 'C:\Program Files\Oracle\VirtualBox'
-      @print_output = print_output
+    def preferred_bridged_ifc
+      @ifc_attr.runcmd
+      .map {|string_pair| clean(string_pair) }
+      .chunk {|string_pair| !!string_pair }
+      .select {|chunk| chunk[0] }
+      .map {|chunk| chunk2ifc(chunk[1]) }
+      .select {|ifc| usable(ifc) }
     end
 
-    def bridged_ifc_list
-      list = runcmd
-      last_key, _ = list[-2].split(':')
-      bifcs, ifc = [], {}
-      list.each do |item|
-        item = clean(item)
-        next if item.nil?
-        k, v = components(item)
-        ifc[k] = v
-        if k == last_key
-          bifcs << ifc if usable(ifc)
-          ifc = {}
-        end
-      end
-      bifcs
+    def clean(string_pair)
+      cleaned = string_pair&.strip
+      cleaned.empty? ? nil : cleaned
     end
 
-    def runcmd
-      out = IO.popen(@cmd, err: %i[child out], chdir: @directory) do |io|
-        io.readlines
-      end
-      raise "Error running command #{@cmd}" unless $?.exitstatus.zero?
-      print out if @print_output
-      out
+    def chunk2ifc(string_pairs)
+      string_pairs
+      .map {|string_pair| components(string_pair) }
+      .to_h
     end
 
-    def clean(item)
-      return nil unless item
-      item = item.chomp
-      return nil unless item
-      item = item.strip
-      return nil if item.empty?
-      item
-    end
-
-    def components(item)
-      k, v = item.split(':')
-      [ k, (v || "nil").strip ]
+    def components(string_pair)
+      return if string_pair.nil?
+      k, v = string_pair.split(':')
+      [ k, v&.strip ]
     end
 
     def usable(ifc)

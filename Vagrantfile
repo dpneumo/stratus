@@ -21,8 +21,8 @@ Vagrant.configure("2") do |config|
                               "/home/vagrant/cummulus",
                               mount_options: ["dmode=755", "fmode=644"]
     stratus.vm.network "forwarded_port", guest: 3000, host: 3000
-    stratus.vm.network "public_network", bridge: BridgedInterfaces.preferred['Name']
-    stratus.vm.boot_timeout = 1200
+    stratus.vm.network "public_network", bridge: BridgedInterfaces.new.preferred&.[]('Name')
+    stratus.vm.boot_timeout = 600
     stratus.vm.provider "virtualbox" do |vb|
       vb.memory = "256"
     end
@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
                           inline: <<-SHELL
       sudo sed -i 's/DEFROUTE="yes"/DEFROUTE="no"/g' /etc/sysconfig/network-scripts/ifcfg-enp0s3
       sudo systemctl restart network
-      ip route get 8.8.8.8 | awk '{print $7}' | xargs -I IPADDR echo "The bridged IP is IPADDR"
+      ip route get 8.8.8.8 | awk '{print $7}' | xargs -I IPADDR echo "BRIDGED IP: IPADDR"
       netstat -rn
     SHELL
     stratus.vm.provision  :shell,
