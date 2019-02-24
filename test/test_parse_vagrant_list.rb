@@ -31,52 +31,10 @@ class TestParseVagrantList < Test::Unit::TestCase
     assert_equal '25', persons.last['Age']
   end
 
-# Tests of private methods
-  # ------ clean ------
-  def test_clean_removes_extraneous_leading_and_trailing_whitespace
-    mystr   = "\t Name:          Mark  \t\n"
-    cleaned =    "Name:          Mark"
-    assert_equal cleaned, @pvl.send(:clean, mystr)
-  end
-
-  def test_clean_returns_nil_for_a_solo_return
-    assert_equal nil, @pvl.send(:clean, "\n")
-  end
-
-  # ------ components ------
-  def test_components_splits_string_into_kv_pair_removing_white_space
-    mystr = "Name  :          Mark"
-    assert_equal ['Name', 'Mark'], @pvl.send(:components, mystr)
-  end
-
-  def test_components_returns_empty_string_for_a_value_that_is_empty
-    mystr = "Name:   "
-    assert_equal ['Name', ''], @pvl.send(:components, mystr)
-  end
-
-  def test_components_returns_nil_for_an_empty_pair
-    mystr = ""
-    assert_equal nil, @pvl.send(:components, mystr)
-  end
-
-  # ------ chunk2hash ------
-  def test_chunk2hash_maps_a_chunk_of_string_pairs_to_a_hash
-    mychunk = one_person_chunk
-    myhash  = @pvl.send(:chunk2hash, mychunk)
-    assert_equal 'Green', myhash['FavoriteColor']
-  end
-
-  def test_chunk2hash_returns_an_empty_hash_if_given_an_empty_array
-    mychunk = []
-    myhash  = @pvl.send(:chunk2hash, mychunk)
-    assert_equal Hash, myhash.class
-    assert myhash.empty?
-  end
-
-  def test_chunk2hash_removes_bad_string_pairs_before_returning_its_hash
-    mychunk = [ "a: b", "", " : ", "d: ", " :g"]
-    expected = {'a'=>'b','d'=>''}
-    assert_equal expected, @pvl.send(:chunk2hash, mychunk)
+  def test_parse_handles_variants_of_bad_string_pairs
+    list = [ "a:b\n", "\n", ":\n", "d:\n", ":g\n", "\n"]
+    expected = [{'a'=>'b'}, {'d'=>''}]
+    assert_equal expected, @pvl.parse(list)
   end
 
   private
