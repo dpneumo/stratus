@@ -18,6 +18,18 @@ class TestParseVagrantList < Test::Unit::TestCase
     assert_equal 'Mark', person['Name']
   end
 
+  def test_can_parse_person_with_gerascophobia
+    person = @pvl.parse(gerascophobic).first
+    assert_equal 'Jack', person['Name']
+    assert_equal '', person['Age']
+  end
+
+  def test_parse_removes_empty_hashes
+    persons = @pvl.parse(empty_persons_included)
+    assert_equal Array, persons.class
+    assert_equal Hash, persons.first.class
+    assert_equal '25', persons.last['Age']
+  end
 
 # Tests of private methods
   # ------ clean ------
@@ -42,34 +54,29 @@ class TestParseVagrantList < Test::Unit::TestCase
     assert_equal ['Name', ''], @pvl.send(:components, mystr)
   end
 
-  def test_components_returns_nil_for_a_key_that_is_empty
-    mystr = " :  Jones"
-    assert_equal nil, @pvl.send(:components, mystr)
-  end
-
   def test_components_returns_nil_for_an_empty_pair
     mystr = ""
     assert_equal nil, @pvl.send(:components, mystr)
   end
 
-  # ------ chunk2ifc ------
-  def test_chunk2ifc_maps_a_chunk_of_string_pairs_to_a_hash
+  # ------ chunk2hash ------
+  def test_chunk2hash_maps_a_chunk_of_string_pairs_to_a_hash
     mychunk = one_person_chunk
-    myhash  = @pvl.send(:chunk2ifc, mychunk)
+    myhash  = @pvl.send(:chunk2hash, mychunk)
     assert_equal 'Green', myhash['FavoriteColor']
   end
 
-  def test_chunk2ifc_returns_an_empty_hash_if_given_an_empty_array
+  def test_chunk2hash_returns_an_empty_hash_if_given_an_empty_array
     mychunk = []
-    myhash  = @pvl.send(:chunk2ifc, mychunk)
+    myhash  = @pvl.send(:chunk2hash, mychunk)
     assert_equal Hash, myhash.class
     assert myhash.empty?
   end
 
-  def test_chunk2ifc_returns_something_if_given_chunk_with_bad_string_pairs
+  def test_chunk2hash_removes_bad_string_pairs_before_returning_its_hash
     mychunk = [ "a: b", "", " : ", "d: ", " :g"]
-    myhash  = @pvl.send(:chunk2ifc, mychunk)
-    assert_equal '', myhash
+    expected = {'a'=>'b','d'=>''}
+    assert_equal expected, @pvl.send(:chunk2hash, mychunk)
   end
 
   private
@@ -92,6 +99,16 @@ class TestParseVagrantList < Test::Unit::TestCase
       ]
     end
 
+    def gerascophobic
+      [
+        "Name:          Jack\n",
+        "Age: \n",
+        "Sex:           Male\n",
+        "FavoriteColor: Green\n",
+        "\n"
+      ]
+    end
+
     def two_persons
       [
         "Name:          Mark\n",
@@ -103,6 +120,31 @@ class TestParseVagrantList < Test::Unit::TestCase
         "Age:           25\n",
         "Sex:           Female\n",
         "FavoriteColor: Red\n",
+        "\n"
+      ]
+    end
+
+    def empty_persons_included
+      [
+        "Name:          Mark\n",
+        "Age:           45\n",
+        "Sex:           Male\n",
+        "FavoriteColor: Green\n",
+        "\n",
+        " : \n",
+        " : \n",
+        " : \n",
+        " : \n",
+        "\n",
+        "Name:          Ruby\n",
+        "Age:           25\n",
+        "Sex:           Female\n",
+        "FavoriteColor: Red\n",
+        "\n",
+        " : \n",
+        " : \n",
+        " : \n",
+        " : \n",
         "\n"
       ]
     end

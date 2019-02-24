@@ -19,24 +19,25 @@ class ParseVagrantList
     .map {|pair| clean(pair) }
     .chunk {|pair| !!pair }
     .select {|chunk| chunk[0] }
-    .map {|chunk| chunk2ifc(chunk[1]) }
+    .map {|chunk| chunk2hash(chunk[1]) }
   end
 
   private
-    def clean(pair)
-      cleaned = pair&.strip
-      cleaned.empty? ? nil : cleaned
-    end
-
-    def chunk2ifc(pairs)
+    def chunk2hash(pairs)
       pairs
-      .map {|pair| components(pair) }
+      .map {|pair| components(pair) }             .tap {|x| puts x.inspect }
+      .reject {|kvpair| kvpair&.first.nil? }      .tap {|x| puts x.inspect }
       .to_h
     end
 
     def components(pair)
-      return if pair.nil? || pair.empty?
+      return unless pair && !pair.empty?
       k, v = pair.split(':')
-      [ k&.strip, v&.strip ]
+      [clean(k), v&.strip || '']
+    end
+
+    def clean(txt)
+      cleaned = txt&.strip
+      cleaned&.empty? ? nil : cleaned
     end
 end
