@@ -1,16 +1,16 @@
-class ParseVagrantList
+class ParseVbManageList
 # Expects a list (array) structured like this:
 
 # [
-#   "Name:          Mark\n"
-#   "Age:           45\n"
-#   "Sex:           Male\n"
-#   "FavoriteColor: Green\n"
-#   "\n"
-#   "Name:          Ruby\n"
-#   "Age:           25\n"
-#   "Sex:           Female\n"
-#   "FavoriteColor: Red\n"
+#   "Name:          Mark\n",
+#   "Age:           45\n",
+#   "Sex:           Male\n",
+#   "FavoriteColor: Green\n",
+#   "\n",
+#   "Name:          Ruby\n",
+#   "Age:           25\n",
+#   "Sex:           Female\n",
+#   "FavoriteColor: Red\n",
 #   "\n"
 # ]
 

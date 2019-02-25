@@ -1,9 +1,9 @@
-require_relative '../parse_vagrant_list'
+require_relative '../parse_vb_manage_list'
 require 'test/unit'
 
-class TestParseVagrantList < Test::Unit::TestCase
+class TestParseVbManageList < Test::Unit::TestCase
   def setup
-    @pvl = ParseVagrantList.new
+    @pvl = ParseVbManageList.new
   end
 
   def test_parse_returns_an_array_of_hashes

@@ -1,4 +1,6 @@
-require_relative 'parse_vagrant_list'
+require_relative 'parse_vb_manage_list'
+require_relative 'cmd_runner'
+
 class BridgedInterfaces
   IFCNOTAVAIL = <<-MSG
     WARNING:
@@ -6,32 +8,29 @@ class BridgedInterfaces
       Check that an interface is enabled and connected to the network.\n
   MSG
 
-  def initialize( list_parser: ParseVagrantList,
-                  vbdir:      'C:\Program Files\Oracle\VirtualBox',
-                  cmd:        'VBoxManage.exe list bridgedifs'      )
-    @parser = list_parser.new
-    @vbdir  = vbdir
-    @cmd    = cmd
+  def initialize( command: 'VBoxManage.exe list bridgedifs',
+                  cmdrunner: CmdRunner,
+                  parser: ParseVbManageList )
+    @cmd     = command
+    @if_list = cmdrunner.new(cmd: @cmd)
+    @parser  = parser.new
   end
 
   def preferred
-    @parser.parse(runcmd)
-    .select {|ifc| usable(ifc) }
+    @parser.parse(if_list)
+    .select {|ifc| usable?(ifc) }
     .sort_by {|ifc| ifc['Wireless'] }
     .first
     .tap {|ifc| puts IFCNOTAVAIL if ifc.nil? }
   end
 
   private
-    def runcmd
-      out = IO.popen(@cmd, err: %i[child out], chdir: @vbdir) do |io|
-        io.readlines
-      end
-      raise "Error running command #{@cmd}" unless $?.exitstatus.zero?
-      out
+    def if_list
+      @if_list.runcmd
     end
 
-    def usable(ifc)
+    def usable?(ifc)
       ifc['Status'] == 'Up' && !ifc['Wireless'].empty?
     end
 end
+
