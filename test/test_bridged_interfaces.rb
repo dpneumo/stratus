@@ -4,22 +4,18 @@ require 'test/unit'
 require 'pry'
 
 class TestBridgedInterfaces < Test::Unit::TestCase
-  def setup
-
-  end
-
   def test_preferred_returns_a_wireless_interface_when_available
-    bi = BridgedInterfaces.new(command: 'wireless_is_up', cmdrunner: MockRunner )
+    bi = BridgedInterfaces.new(command: 'wireless_up', cmdrunner: MockRunner )
     assert_equal 'WireleSs If', bi.preferred['Name']
   end
 
   def test_preferred_returns_a_wired_interface_when_available
-    bi = BridgedInterfaces.new(command: 'wired_is_up', cmdrunner: MockRunner )
+    bi = BridgedInterfaces.new(command: 'wired_up', cmdrunner: MockRunner )
     assert_equal 'Wired iF', bi.preferred['Name']
   end
 
-  def test_preferred_returns_a_wired_interface_when_wired_and_wireless_are_available
-    bi = BridgedInterfaces.new(command: 'both_avail', cmdrunner: MockRunner )
+  def test_preferred_returns_a_wired_ifc_when_wired_and_wireless_are_available
+    bi = BridgedInterfaces.new(command: 'both_up', cmdrunner: MockRunner )
     assert_equal 'Wired iF', bi.preferred['Name']
   end
 
@@ -27,5 +23,4 @@ class TestBridgedInterfaces < Test::Unit::TestCase
     bi = BridgedInterfaces.new(command: 'tap_adapt', cmdrunner: MockRunner )
     assert_equal nil, bi.preferred
   end
-
 end

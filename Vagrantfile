@@ -26,6 +26,7 @@ Vagrant.configure("2") do |config|
     stratus.vm.provider "virtualbox" do |vb|
       vb.memory = "256"
     end
+    #designed for Centos 7. Assumes
     stratus.vm.provision  :shell,
                           run: "always",
                           inline: <<-SHELL

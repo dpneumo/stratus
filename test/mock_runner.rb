@@ -6,17 +6,13 @@ class MockRunner
 
   def runcmd
     case @cmd
-    when 'wired_is_up'
+    when 'wired_up'
       wired_up
-    when 'wired_is_down'
-      wired_down
-    when 'wireless_is_up'
+    when 'wireless_up'
       wireless_up
-    when 'wireless_is_down'
-      wireless_down
-    when 'both_avail'
+    when 'both_up'
       wired_up + wireless_up
-    else
+    else  #both down
       tap_adapt
     end
   end
@@ -27,18 +23,6 @@ class MockRunner
       "MediumType:      Ethernet\n",
       "Wireless:        No\n",
       "Status:          Up\n",
-      "VBoxNetworkName: HostInterfaceNetworking-Wired iF\n",
-      "\n",
-    ]
-  end
-
-  def wired_down
-    [
-      "Name:            Wired iF\n",
-      "MediumType:      Ethernet\n",
-      "Wireless:        No\n",
-      "Status:          Down\n",
-      "VBoxNetworkName: HostInterfaceNetworking-Wired iF\n",
       "\n",
     ]
   end
@@ -49,18 +33,6 @@ class MockRunner
       "MediumType:      Ethernet\n",
       "Wireless:        Yes\n",
       "Status:          Up\n",
-      "VBoxNetworkName: HostInterfaceNetworking-WireleSs If\n",
-      "\n"
-    ]
-  end
-
-  def wireless_down
-    [
-      "Name:            WireleSs If\n",
-      "MediumType:      Ethernet\n",
-      "Wireless:        Yes\n",
-      "Status:          Down\n",
-      "VBoxNetworkName: HostInterfaceNetworking-WireleSs If\n",
       "\n"
     ]
   end
@@ -71,7 +43,6 @@ class MockRunner
       "MediumType:      Ethernet\n",
       "Wireless:        No\n",
       "Status:          Down\n",
-      "VBoxNetworkName: HostInterfaceNetworking-TAP-Windows Adapter V9\n",
       "\n"
     ]
   end

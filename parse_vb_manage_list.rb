@@ -18,8 +18,8 @@ class ParseVbManageList
     list
     .map {|pair| clean(pair) }
     .chunk {|pair| !!pair }
-    .select {|chunk| chunk[0] }
-    .map {|chunk| chunk2hash(chunk[1]) }
+    .select {|chunk| chunk.first }
+    .map {|chunk| chunk2hash(chunk.last) }
     .reject {|h| h.empty? }
   end
 
