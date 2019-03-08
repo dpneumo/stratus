@@ -24,8 +24,8 @@ sudo yum install python2-certbot-nginx -y
 printf "========= Install nginx ===========================\n"
 sudo yum install nginx -y
 sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.$(date +%s)
-sudo cp /vagrant/nginx/nginx.conf /etc/nginx/nginx.conf
-sudo cp /vagrant/nginx/stratus.conf /etc/nginx/conf.d/stratus.conf
+sudo cp /vagrant/client_files/nginx/nginx.conf /etc/nginx/nginx.conf
+sudo cp /vagrant/client_files/nginx/stratus.conf /etc/nginx/conf.d/stratus.conf
 sudo chmod 644 /etc/nginx/nginx.conf
 sudo chmod 644 /etc/nginx/conf.d/*
 sudo touch /var/log/nginx/error.log
@@ -41,17 +41,17 @@ sudo systemctl mask firewalld
 printf "========= Setup iptables logging ==================\n\n"
 sudo touch /var/log/iptables.log
 sudo chmod 666 /var/log/iptables.log
-sudo cp /vagrant/iptables/rsyslog.conf /etc/rsyslog.d/20-iptables.conf
+sudo cp /vagrant/client_files/iptables/rsyslog.conf /etc/rsyslog.d/20-iptables.conf
 sudo chmod 644 /etc/rsyslog.d/20-iptables.conf
 sudo systemctl restart rsyslog
-sudo cp /vagrant/iptables/logrotate.conf /etc/logrotate.d/iptables
+sudo cp /vagrant/client_files/iptables/logrotate.conf /etc/logrotate.d/iptables
 sudo chmod 644 /etc/logrotate.d/iptables
 
 printf "========= Install iptables ========================\n"
 sudo yum install iptables-services -y
 sudo systemctl start iptables
 sudo systemctl enable iptables
-sudo cp /vagrant/iptables/rules.sh iptables_rules.sh
+sudo cp /vagrant/client_files/iptables/rules.sh iptables_rules.sh
 sudo chmod 755 iptables_rules.sh
 sudo touch /var/log/iptables_rules_install.log
 sudo chmod 666 /var/log/iptables_rules_install.log
@@ -61,9 +61,9 @@ sudo ./iptables_rules.sh >> /var/log/iptables_rules_install.log
 printf "========= Install Fail2Ban ========================\n"
 sudo yum --enablerepo=epel clean metadata
 sudo yum install fail2ban -y
-sudo cp /vagrant/fail2ban/jail.local /etc/fail2ban/
-sudo cp /vagrant/fail2ban/jail.d/*.conf /etc/fail2ban/jail.d/
-sudo cp /vagrant/fail2ban/filter.d/*.conf /etc/fail2ban/filter.d/
+sudo cp /vagrant/client_files/fail2ban/jail.local /etc/fail2ban/
+sudo cp /vagrant/client_files/fail2ban/jail.d/*.conf /etc/fail2ban/jail.d/
+sudo cp /vagrant/client_files/fail2ban/filter.d/*.conf /etc/fail2ban/filter.d/
 sudo chmod 644 /etc/fail2ban/jail.local
 sudo chmod 644 /etc/fail2ban/jail.d/*
 sudo chmod 644 /etc/fail2ban/filter.d/*
@@ -92,7 +92,7 @@ chmod 644 ~/.ssh/authorized_keys
 
 printf "========= Install OpenSSL =========================\n"
 sudo yum install openssl -y
-cp /vagrant/openssl/setup_ca.sh setup_ca.sh
+cp /vagrant/client_files/openssl/setup_ca.sh setup_ca.sh
 chmod +x setup_ca.sh
 
 printf "========= Install Ansible =========================\n"
@@ -113,7 +113,7 @@ make test
 sudo make install
 
 sudo mkdir /etc/redis
-sudo cp /vagrant/redis/redis_*.conf /etc/redis/
+sudo cp /vagrant/client_files/redis/redis_*.conf /etc/redis/
 sudo chown redis:redis /etc/redis/*
 sudo chmod 644 /etc/redis/*
 
@@ -127,11 +127,11 @@ sudo mkdir -p /var/redis/redis_cache
 sudo chown redis:redis /var/redis/redis_cache
 sudo chmod 770 /var/redis/redis_cache
 
-sudo cp /vagrant/redis/40-redis.conf /usr/lib/sysctl.d/
+sudo cp /vagrant/client_files/redis/40-redis.conf /usr/lib/sysctl.d/
 sudo chmod 644 /usr/lib/sysctl.d/40-redis.conf
 sudo sysctl vm.overcommit_memory=1
 
-sudo cp /vagrant/redis/*.service /etc/systemd/system/
+sudo cp /vagrant/client_files/redis/*.service /etc/systemd/system/
 sudo systemctl start redis_sidekiq
 sudo systemctl enable redis_sidekiq
 sudo systemctl start redis_cache
@@ -171,7 +171,7 @@ rbenv rehash
 gem install bundler --no-document
 
 printf "========= Manual tasks that must be done ==========\n"
-cp /vagrant/finalize/final_steps.sh final_steps.sh
+cp /vagrant/client_files/finalize/final_steps.sh final_steps.sh
 chmod +x final_steps.sh
 
 read -r -d '' REMAINING_TASKS <<EOT
