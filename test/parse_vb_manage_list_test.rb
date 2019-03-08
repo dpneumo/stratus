@@ -1,7 +1,7 @@
+require 'test_helper'
 require_relative '../parse_vb_manage_list'
-require 'test/unit'
 
-class TestParseVbManageList < Test::Unit::TestCase
+class TestParseVbManageList < MiniTest::Test
   def setup
     @pvl = ParseVbManageList.new
   end
@@ -45,15 +45,6 @@ class TestParseVbManageList < Test::Unit::TestCase
         "Sex:           Male\n",
         "FavoriteColor: Green\n",
         "\n"
-      ]
-    end
-
-    def one_person_chunk
-      [
-        "Name:          Mark",
-        "Age:           45",
-        "Sex:           Male",
-        "FavoriteColor: Green"
       ]
     end
 

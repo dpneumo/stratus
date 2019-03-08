@@ -12,6 +12,8 @@ class MockRunner
       wireless_up
     when 'both_up'
       wired_up + wireless_up
+    when 'both_up_reversed'
+      wireless_up + wired_up
     else  #both down
       tap_adapt
     end

@@ -8,10 +8,10 @@ class BridgedInterfaces
       Check that an interface is enabled and connected to the network.\n
   MSG
 
-  def initialize( command: 'VBoxManage.exe list bridgedifs',
+  def initialize( cmd: 'VBoxManage.exe list bridgedifs',
                   cmdrunner: CmdRunner,
                   parser: ParseVbManageList )
-    @cmd     = command
+    @cmd     = cmd
     @if_list = cmdrunner.new(cmd: @cmd)
     @parser  = parser.new
   end
@@ -19,7 +19,7 @@ class BridgedInterfaces
   def preferred
     @parser.parse(@if_list.runcmd)
     .select {|ifc| usable?(ifc) }
-    #.sort_by {|ifc| ifc['Wireless'] }
+    .sort_by {|ifc| ifc['Wireless'] }
     .first
     .tap {|ifc| puts IFCNOTAVAIL if ifc.nil? }
   end
