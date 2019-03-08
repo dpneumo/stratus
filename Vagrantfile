@@ -2,7 +2,7 @@
 #
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-require_relative 'bridged_interfaces'
+require_relative 'vagrant_support/bridged_interfaces'
 
 Vagrant.configure("2") do |config|
 
@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
       netstat -rn
     SHELL
     stratus.vm.provision  :shell,
-                          path: "bootstrap-centos-stratus.sh",
+                          path: "vagrant_support/bootstrap-centos-stratus.sh",
                           privileged: false
   end
 
