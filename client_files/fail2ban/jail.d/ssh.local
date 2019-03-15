@@ -1,0 +1,6 @@
+[sshd-ddos]
+# This jail corresponds to the standard configuration in Fail2ban.
+enabled = true
+
+[sshd]
+enabled = false

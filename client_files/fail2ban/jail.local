@@ -1,5 +1,5 @@
 [DEFAULT]
-ignoreip = 127.0.0.1/8 192.168.1.90
+ignoreip = 127.0.0.1/8 10.0.2.2
 
 # Ban for an hour
 bantime  = 3600

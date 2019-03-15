@@ -95,6 +95,23 @@ sudo yum install openssl -y
 cp /vagrant/client_files/openssl/setup_ca.sh setup_ca.sh
 chmod +x setup_ca.sh
 
+printf "========= Setup Postfix =================  ========\n"
+SRC='/vagrant/client_files'
+PFSASL=/'etc/postfix/sasl'
+sudo yum install -y cyrus-sasl-plain
+sudo mkdir /etc/postfix/sasl
+sudo mv /etc/aliases               /etc/aliases.$(date +%s)
+sudo mv /etc/postfix/main.cf       /etc/postfix/main.cf.$(date +%s)
+sudo cp $SRC/postfix/aliases       /etc/
+sudo cp $SRC/postfix/main.cf       /etc/postfix/
+sudo cp $SRC/postfix/sasl_password $PFSASL
+sudo newaliases
+# Fix the password before postmap
+# https://www.linode.com/docs/email/postfix/
+#           configure-postfix-to-send-mail-using-gmail-and-google-apps-on-debian-or-ubuntu/
+sudo postmap    $PFSASL/sasl_passwd
+sudo chmod 0600 $PFSASL/sasl_passwd $PFSASL/sasl_passwd.db
+
 printf "========= Install Ansible =========================\n"
 rm -Rf ~/.ansible
 git clone https://github.com/ansible/ansible.git ~/.ansible --recursive
@@ -113,7 +130,7 @@ make test
 sudo make install
 
 sudo mkdir /etc/redis
-sudo cp /vagrant/client_files/redis/redis_*.conf /etc/redis/
+sudo cp $SRC/redis/redis_*.conf     /etc/redis/
 sudo chown redis:redis /etc/redis/*
 sudo chmod 644 /etc/redis/*
 
@@ -127,11 +144,11 @@ sudo mkdir -p /var/redis/redis_cache
 sudo chown redis:redis /var/redis/redis_cache
 sudo chmod 770 /var/redis/redis_cache
 
-sudo cp /vagrant/client_files/redis/40-redis.conf /usr/lib/sysctl.d/
+sudo cp $SRC/redis/40-redis.conf    /usr/lib/sysctl.d/
 sudo chmod 644 /usr/lib/sysctl.d/40-redis.conf
 sudo sysctl vm.overcommit_memory=1
 
-sudo cp /vagrant/client_files/redis/*.service /etc/systemd/system/
+sudo cp $SRC/redis/*.service        /etc/systemd/system/
 sudo systemctl start redis_sidekiq
 sudo systemctl enable redis_sidekiq
 sudo systemctl start redis_cache
