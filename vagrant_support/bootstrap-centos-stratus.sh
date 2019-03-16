@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+SRC='/vagrant/client_files'
 
 # Keep in mind, this is running as the vagrant user, not root!
 
@@ -23,9 +24,9 @@ sudo yum install python2-certbot-nginx -y
 
 printf "========= Install nginx ===========================\n"
 sudo yum install nginx -y
-sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.$(date +%s)
-sudo cp /vagrant/client_files/nginx/nginx.conf /etc/nginx/nginx.conf
-sudo cp /vagrant/client_files/nginx/stratus.conf /etc/nginx/conf.d/stratus.conf
+sudo mv /etc/nginx/nginx.conf   /etc/nginx/nginx.conf.$(date +%s)
+sudo cp $SRC/nginx/nginx.conf   /etc/nginx/nginx.conf
+sudo cp $SRC/nginx/stratus.conf /etc/nginx/conf.d/stratus.conf
 sudo chmod 644 /etc/nginx/nginx.conf
 sudo chmod 644 /etc/nginx/conf.d/*
 sudo touch /var/log/nginx/error.log
@@ -40,30 +41,31 @@ sudo systemctl mask firewalld
 
 printf "========= Setup iptables logging ==================\n\n"
 sudo touch /var/log/iptables.log
+sudo cp $SRC/iptables/rsyslog.conf   /etc/rsyslog.d/20-iptables.conf
+sudo cp $SRC/iptables/logrotate.conf /etc/logrotate.d/iptables
 sudo chmod 666 /var/log/iptables.log
-sudo cp /vagrant/client_files/iptables/rsyslog.conf /etc/rsyslog.d/20-iptables.conf
 sudo chmod 644 /etc/rsyslog.d/20-iptables.conf
-sudo systemctl restart rsyslog
-sudo cp /vagrant/client_files/iptables/logrotate.conf /etc/logrotate.d/iptables
 sudo chmod 644 /etc/logrotate.d/iptables
+sudo systemctl restart rsyslog
 
 printf "========= Install iptables ========================\n"
 sudo yum install iptables-services -y
+sudo cp $SRC/iptables/rules.sh iptables_rules.sh
+sudo touch /var/log/iptables_rules_install.log
+sudo chmod 755 iptables_rules.sh
+sudo chmod 666 /var/log/iptables_rules_install.log
+# ***** Install new iptables rules and start *****
+sudo ./iptables_rules.sh >> /var/log/iptables_rules_install.log
 sudo systemctl start iptables
 sudo systemctl enable iptables
-sudo cp /vagrant/client_files/iptables/rules.sh iptables_rules.sh
-sudo chmod 755 iptables_rules.sh
-sudo touch /var/log/iptables_rules_install.log
-sudo chmod 666 /var/log/iptables_rules_install.log
-# ***** Install new iptables rules *****
-sudo ./iptables_rules.sh >> /var/log/iptables_rules_install.log
 
 printf "========= Install Fail2Ban ========================\n"
 sudo yum --enablerepo=epel clean metadata
 sudo yum install fail2ban -y
-sudo cp /vagrant/client_files/fail2ban/jail.local /etc/fail2ban/
-sudo cp /vagrant/client_files/fail2ban/jail.d/*.conf /etc/fail2ban/jail.d/
-sudo cp /vagrant/client_files/fail2ban/filter.d/*.conf /etc/fail2ban/filter.d/
+sudo cp $SRC/fail2ban/fail2ban.local  /etc/fail2ban/
+sudo cp $SRC/fail2ban/jail.local      /etc/fail2ban/
+sudo cp $SRC/fail2ban/jail.d/*.conf   /etc/fail2ban/jail.d/
+sudo cp $SRC/fail2ban/filter.d/*.conf /etc/fail2ban/filter.d/
 sudo chmod 644 /etc/fail2ban/jail.local
 sudo chmod 644 /etc/fail2ban/jail.d/*
 sudo chmod 644 /etc/fail2ban/filter.d/*
@@ -92,11 +94,10 @@ chmod 644 ~/.ssh/authorized_keys
 
 printf "========= Install OpenSSL =========================\n"
 sudo yum install openssl -y
-cp /vagrant/client_files/openssl/setup_ca.sh setup_ca.sh
+cp $SRC/openssl/setup_ca.sh setup_ca.sh
 chmod +x setup_ca.sh
 
 printf "========= Setup Postfix =================  ========\n"
-SRC='/vagrant/client_files'
 PFSASL=/'etc/postfix/sasl'
 sudo yum install -y cyrus-sasl-plain
 sudo mkdir /etc/postfix/sasl
@@ -188,7 +189,7 @@ rbenv rehash
 gem install bundler --no-document
 
 printf "========= Manual tasks that must be done ==========\n"
-cp /vagrant/client_files/finalize/final_steps.sh final_steps.sh
+cp $SRC/finalize/final_steps.sh final_steps.sh
 chmod +x final_steps.sh
 
 read -r -d '' REMAINING_TASKS <<EOT
