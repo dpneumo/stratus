@@ -10,8 +10,8 @@ findtime = 3600
 maxretry = 6
 
 # email notifications
-#mta        = sendmail
-#mta        = mail
-#destemail  = dpneumo@gmail.com
-#sendername = Fail2BanAlerts
-#action     = %(action_mwl)s
+mta        = sendmail
+destemail  = dpneumo@gmail.com
+sendername = Fail2BanAlerts
+sender      = dpneumo@gmail.com
+action     = %(action_mwl)s
