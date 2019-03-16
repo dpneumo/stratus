@@ -193,13 +193,14 @@ From the host:
   $vagrant ssh
 
 From /home/vagrant on vm:
-  $subj=stratus ./final_steps.sh
+  $subj=stratus $gapppass=abcdefghijklmnop ./final_steps.sh
 
 This will:
-1. Run setup_ca.sh from /home/vagrant on vm
-2. Copy certs from CA/ to cirrus/config/certs/
-3. (Re)start nginx
-4. Start the Rails app
+1. Set Google App Password for postfix
+2. Run setup_ca.sh from /home/vagrant on vm
+3. Copy certs from CA/ to cirrus/config/certs/
+4. (Re)start nginx
+5. Start the Rails app
 
 Add cacert.pem to trusted root certs:
   - Windows:
