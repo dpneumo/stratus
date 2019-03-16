@@ -85,12 +85,12 @@ git config --global push.default simple
 
 printf "========= ssh files ===============================\n"
 ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
-chmod 600 ~/.ssh/id_rsa
-chmod 644 ~/.ssh/id_rsa.pub
+sudo mv /etc/ssh/sshd_config       /etc/ssh/sshd_config.$(date +%s)
+sudo cp $SRC/ssh/sshd_config       /etc/ssh/
 touch ~/.ssh/known_hosts
 touch ~/.ssh/authorized_keys
-chmod 644 ~/.ssh/known_hosts
-chmod 644 ~/.ssh/authorized_keys
+sudo chmod 600 ~/.ssh/id_rsa /etc/ssh/sshd_config
+sudo chmod 644 ~/.ssh/id_rsa.pub ~/.ssh/known_hosts ~/.ssh/authorized_keys
 
 printf "========= Install OpenSSL =========================\n"
 sudo yum install openssl -y
@@ -98,20 +98,14 @@ cp $SRC/openssl/setup_ca.sh setup_ca.sh
 chmod +x setup_ca.sh
 
 printf "========= Setup Postfix =================  ========\n"
-PFSASL=/'etc/postfix/sasl'
 sudo yum install -y cyrus-sasl-plain
 sudo mkdir /etc/postfix/sasl
 sudo mv /etc/aliases               /etc/aliases.$(date +%s)
 sudo mv /etc/postfix/main.cf       /etc/postfix/main.cf.$(date +%s)
 sudo cp $SRC/postfix/aliases       /etc/
 sudo cp $SRC/postfix/main.cf       /etc/postfix/
-sudo cp $SRC/postfix/sasl_password $PFSASL
 sudo newaliases
-# Fix the password before postmap
-# https://www.linode.com/docs/email/postfix/
-#           configure-postfix-to-send-mail-using-gmail-and-google-apps-on-debian-or-ubuntu/
-sudo postmap    $PFSASL/sasl_passwd
-sudo chmod 0600 $PFSASL/sasl_passwd $PFSASL/sasl_passwd.db
+# Start postfix in final_steps.sh
 
 printf "========= Install Ansible =========================\n"
 rm -Rf ~/.ansible
