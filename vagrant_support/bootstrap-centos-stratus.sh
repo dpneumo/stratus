@@ -17,6 +17,70 @@ sudo yum groups mark convert "Development Tools"
 sudo yum group install -y "Development Tools"
 sudo yum install -y gettext-devel perl-CPAN perl-devel zlib-devel nano expect tcl
 
+printf "========= Setup iptables logging ==================\n\n"
+sudo touch /var/log/iptables.log
+sudo cp $SRC/iptables/rsyslog.conf   /etc/rsyslog.d/20-iptables.conf
+sudo cp $SRC/iptables/logrotate.conf /etc/logrotate.d/iptables
+sudo chmod 666 /var/log/iptables.log
+sudo chmod 644 /etc/rsyslog.d/20-iptables.conf
+sudo chmod 644 /etc/logrotate.d/iptables
+sudo systemctl restart rsyslog
+
+printf "========= Install iptables and rules ================\n"
+sudo yum install iptables-services -y
+sudo cp $SRC/iptables/rules.sh iptables_rules.sh
+sudo touch /var/log/iptables_rules_install.log
+sudo chmod 755 iptables_rules.sh
+sudo chmod 666 /var/log/iptables_rules_install.log
+sudo ./iptables_rules.sh >> /var/log/iptables_rules_install.log
+
+printf "========= Stop firewalld & Start iptables============\n"
+sudo systemctl stop firewalld
+sudo systemctl start iptables
+sudo systemctl enable iptables
+sudo systemctl disable firewalld
+sudo systemctl mask firewalld
+
+printf "========= Install Git =============================\n"
+sudo yum install -y git
+git config --global user.name "Mitch Kuppinger"
+git config --global user.email dpneumo@gmail.com
+git config --global push.default simple
+
+printf "========= Install Fail2Ban ==========================\n"
+git clone https://github.com/fail2ban/fail2ban.git
+sudo python setup.py install
+sudo cp $SRC/fail2ban/fail2ban.local   /etc/fail2ban/
+sudo cp $SRC/fail2ban/jail.local       /etc/fail2ban/
+sudo cp $SRC/fail2ban/jail.d/*.local   /etc/fail2ban/jail.d/
+sudo cp $SRC/fail2ban/filter.d/*.local /etc/fail2ban/filter.d/
+sudo cp $SRC/fail2ban/gen_badbots      /etc/fail2ban/gen_badbots
+if [[ -e /etc/fail2ban/00-firewalld.conf ]]; then
+  sudo rm /etc/fail2ban/jail.d/00-firewalld.conf
+fi
+sudo chmod 644 /etc/fail2ban/fail2ban.local
+sudo chmod 644 /etc/fail2ban/jail.local
+sudo chmod 644 /etc/fail2ban/jail.d/*
+sudo chmod 644 /etc/fail2ban/filter.d/*
+sudo chmod 755 /etc/fail2ban/gen_badbots
+sudo /etc/fail2ban/gen_badbots
+sudo systemctl start fail2ban
+sudo systemctl enable fail2ban
+
+printf "========= ssh files ===============================\n"
+ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
+sudo mv /etc/ssh/sshd_config       /etc/ssh/sshd_config.$(date +%s)
+sudo cp $SRC/ssh/sshd_config       /etc/ssh/
+touch ~/.ssh/known_hosts
+touch ~/.ssh/authorized_keys
+sudo chmod 600 ~/.ssh/id_rsa      /etc/ssh/sshd_config
+sudo chmod 644 ~/.ssh/id_rsa.pub ~/.ssh/known_hosts ~/.ssh/authorized_keys
+
+printf "========= Install OpenSSL =========================\n"
+sudo yum install openssl -y
+cp $SRC/openssl/setup_ca.sh       setup_ca.sh
+chmod +x setup_ca.sh
+
 printf "========= Install certbot (Let's Encrypt) =========\n"
 # Install certbot (Let's Encrypt)
 #sudo yum install certbot -y
@@ -33,74 +97,6 @@ sudo touch /var/log/nginx/error.log
 sudo touch /var/log/nginx/access.log
 sudo systemctl enable nginx
 # Do not start nginx yet. Need certs for TLS in place first.
-
-printf "========= Permanently stop firewalld ==============\n"
-sudo systemctl stop firewalld
-sudo systemctl disable firewalld
-sudo systemctl mask firewalld
-
-printf "========= Setup iptables logging ==================\n\n"
-sudo touch /var/log/iptables.log
-sudo cp $SRC/iptables/rsyslog.conf   /etc/rsyslog.d/20-iptables.conf
-sudo cp $SRC/iptables/logrotate.conf /etc/logrotate.d/iptables
-sudo chmod 666 /var/log/iptables.log
-sudo chmod 644 /etc/rsyslog.d/20-iptables.conf
-sudo chmod 644 /etc/logrotate.d/iptables
-sudo systemctl restart rsyslog
-
-printf "========= Install iptables ========================\n"
-sudo yum install iptables-services -y
-sudo cp $SRC/iptables/rules.sh iptables_rules.sh
-sudo touch /var/log/iptables_rules_install.log
-sudo chmod 755 iptables_rules.sh
-sudo chmod 666 /var/log/iptables_rules_install.log
-# ***** Install new iptables rules and start *****
-sudo ./iptables_rules.sh >> /var/log/iptables_rules_install.log
-sudo systemctl start iptables
-sudo systemctl enable iptables
-
-printf "========= Install Fail2Ban ========================\n"
-git clone https://github.com/fail2ban/fail2ban.git
-sudo python setup.py install
-
-sudo cp $SRC/fail2ban/fail2ban.local  /etc/fail2ban/
-sudo cp $SRC/fail2ban/jail.local      /etc/fail2ban/
-sudo cp $SRC/fail2ban/jail.d/*.local   /etc/fail2ban/jail.d/
-sudo cp $SRC/fail2ban/filter.d/*.local /etc/fail2ban/filter.d/
-sudo cp $SRC/fail2ban/gen_badbots     /etc/fail2ban/gen_badbots
-if [[ -e /etc/fail2ban/00-firewalld.conf ]]; then
-  sudo rm /etc/fail2ban/jail.d/00-firewalld.conf
-fi
-sudo chmod 644 /etc/fail2ban/fail2ban.local
-sudo chmod 644 /etc/fail2ban/jail.local
-sudo chmod 644 /etc/fail2ban/jail.d/*
-sudo chmod 644 /etc/fail2ban/filter.d/*
-sudo chmod 755 /etc/fail2ban/gen_badbots
-sudo /etc/fail2ban/gen_badbots
-sudo systemctl enable fail2ban
-sudo systemctl start fail2ban
-
-printf "========= Install Git =============================\n"
-sudo yum install -y git
-
-# Fix git attributions and settings
-git config --global user.name "Mitch Kuppinger"
-git config --global user.email dpneumo@gmail.com
-git config --global push.default simple
-
-printf "========= ssh files ===============================\n"
-ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
-sudo mv /etc/ssh/sshd_config       /etc/ssh/sshd_config.$(date +%s)
-sudo cp $SRC/ssh/sshd_config       /etc/ssh/
-touch ~/.ssh/known_hosts
-touch ~/.ssh/authorized_keys
-sudo chmod 600 ~/.ssh/id_rsa /etc/ssh/sshd_config
-sudo chmod 644 ~/.ssh/id_rsa.pub ~/.ssh/known_hosts ~/.ssh/authorized_keys
-
-printf "========= Install OpenSSL =========================\n"
-sudo yum install openssl -y
-cp $SRC/openssl/setup_ca.sh setup_ca.sh
-chmod +x setup_ca.sh
 
 printf "========= Setup Postfix =================  ========\n"
 sudo yum install -y cyrus-sasl-plain
@@ -198,16 +194,16 @@ From the host:
   $vagrant ssh
 
 From /home/vagrant on vm:
-  $subj=stratus $gapppass=abcdefghijklmnop ./final_steps.sh
+  $subj=stratus $gapppass=googleapppasswrd ./final_steps.sh
 
-This will:
-1. Set Google App Password for postfix
-2. Run setup_ca.sh from /home/vagrant on vm
-3. Copy certs from CA/ to cirrus/config/certs/
-4. (Re)start nginx
-5. Start the Rails app
+  This will:
+    1. Set Google App Password for postfix
+    2. Run setup_ca.sh from /home/vagrant on vm
+    3. Copy certs from CA/ to cirrus/config/certs/
+    4. (Re)start nginx
+    5. Start the Rails app
 
-Add cacert.pem to trusted root certs:
+Finally add cacert.pem to trusted root certs:
   - Windows:
       1. Chrome and IE
             Use mmc (Start > mmc > enter)

@@ -64,7 +64,7 @@ GHUB_IP="192.30.253.112 192.30.253.113"
  iptables -A wan_in  -p tcp --sport  80  -m state --state ESTABLISHED     -j ACCEPT
  iptables -A wan_out -p tcp --dport  80  -m state --state NEW,ESTABLISHED -j ACCEPT
 
- # HTTPS Client (YUM, Git)
+ # HTTPS Client (YUM, Git, Google)
  iptables -A wan_in  -p tcp --sport 443 -m state --state ESTABLISHED     -j ACCEPT
  iptables -A wan_out -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
 
