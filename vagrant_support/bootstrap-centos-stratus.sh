@@ -71,6 +71,7 @@ sudo cp $SRC/fail2ban/gen_badbots     /etc/fail2ban/gen_badbots
 if [[ -e /etc/fail2ban/00-firewalld.conf ]]; then
   sudo rm /etc/fail2ban/jail.d/00-firewalld.conf
 fi
+sudo chmod 644 /etc/fail2ban/fail2ban.local
 sudo chmod 644 /etc/fail2ban/jail.local
 sudo chmod 644 /etc/fail2ban/jail.d/*
 sudo chmod 644 /etc/fail2ban/filter.d/*
