@@ -60,18 +60,22 @@ sudo systemctl start iptables
 sudo systemctl enable iptables
 
 printf "========= Install Fail2Ban ========================\n"
-sudo yum --enablerepo=epel clean metadata
-sudo yum install fail2ban -y
+git clone https://github.com/fail2ban/fail2ban.git
+sudo python setup.py install
+
 sudo cp $SRC/fail2ban/fail2ban.local  /etc/fail2ban/
 sudo cp $SRC/fail2ban/jail.local      /etc/fail2ban/
-sudo cp $SRC/fail2ban/jail.d/*.conf   /etc/fail2ban/jail.d/
-sudo cp $SRC/fail2ban/filter.d/*.conf /etc/fail2ban/filter.d/
-sudo chmod 644 /etc/fail2ban/jail.local
-sudo chmod 644 /etc/fail2ban/jail.d/*
-sudo chmod 644 /etc/fail2ban/filter.d/*
+sudo cp $SRC/fail2ban/jail.d/*.local   /etc/fail2ban/jail.d/
+sudo cp $SRC/fail2ban/filter.d/*.local /etc/fail2ban/filter.d/
+sudo cp $SRC/fail2ban/gen_badbots     /etc/fail2ban/gen_badbots
 if [[ -e /etc/fail2ban/00-firewalld.conf ]]; then
   sudo rm /etc/fail2ban/jail.d/00-firewalld.conf
 fi
+sudo chmod 644 /etc/fail2ban/jail.local
+sudo chmod 644 /etc/fail2ban/jail.d/*
+sudo chmod 644 /etc/fail2ban/filter.d/*
+sudo chmod 755 /etc/fail2ban/gen_badbots
+sudo /etc/fail2ban/gen_badbots
 sudo systemctl enable fail2ban
 sudo systemctl start fail2ban
 

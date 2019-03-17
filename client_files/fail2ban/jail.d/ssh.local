@@ -1,6 +1,0 @@
-[sshd]
-enabled = false
-
-[sshd-ddos]
-# This jail corresponds to the standard configuration in Fail2ban.
-enabled = true
