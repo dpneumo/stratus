@@ -1,0 +1,31 @@
+#
+# SSH servers
+#
+
+[sshd]
+enabled = true
+mode = normal
+port    = ssh
+logpath = /var/log/secure
+backend = %(sshd_backend)s
+
+[sshd-ddos]
+enabled = false
+mode = ddos
+port    = ssh
+logpath = /var/log/secure
+backend = %(sshd_backend)s
+
+[sshd-extra]
+enabled = false
+mode = extra
+port    = ssh
+logpath = /var/log/secure
+backend = %(sshd_backend)s
+
+[sshd-aggressive]
+enabled = false
+mode = aggressive
+port    = ssh
+logpath = /var/log/secure
+backend = %(sshd_backend)s
