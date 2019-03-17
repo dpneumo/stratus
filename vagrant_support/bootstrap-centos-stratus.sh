@@ -95,6 +95,7 @@ sudo chmod 644 /etc/nginx/nginx.conf
 sudo chmod 644 /etc/nginx/conf.d/*
 sudo touch /var/log/nginx/error.log
 sudo touch /var/log/nginx/access.log
+sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096
 sudo systemctl enable nginx
 # Do not start nginx yet. Need certs for TLS in place first.
 
