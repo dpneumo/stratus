@@ -2,49 +2,39 @@
 # OpenSSL configuration file.
 #
 HOME             = .
-dir              = $HOME/CA
+dir              = $HOME/CA/intermediate
 
 ####################################################################
 [ ca ]
 default_ca       = CA_default
 
 [ CA_default ]
-certificate      = $dir/cacert.pem
-private_key      = $dir/private/cakey.pem
+certificate      = $dir/certs/blacklakeca.cert.pem
+private_key      = $dir/private/blacklakeca.key.pem
 
-certs            = $dir/newcerts
-new_certs_dir    = $certs
+certs            = $dir/certs
+new_certs_dir    = $dir/newcerts
 database         = $dir/index.txt
 serial           = $dir/serial
+RANDFILE         = $dir/private/.rand
 
 crl_dir          = $dir/crl
 crlnumber        = $dir/crlnumber
-crl              = $crl_dir/ca.crl
+crl              = $crl_dir/blacklakeca.crl
+crl_extensions   = crl_ext
+default_crl_days = 30
 
-RANDFILE         = $dir/private/.rand
+default_md       = sha512
 
-x509_extensions  = usr_cert
-copy_extensions  = copy
 nameopt          = ca_default
 certopt          = ca_default
-
 default_days     = 365
-default_crl_days = 30
-default_md       = sha512
 preserve         = no
+policy           = policy_loose
 email_in_dn      = no
-policy           = policy_anything
 unique_subject   = no
 
-[ policy_match ]
-countryName             = match
-stateOrProvinceName     = match
-organizationName        = match
-organizationalUnitName  = optional
-commonName              = supplied
-emailAddress            = optional
-
-[ policy_anything ]
+[ policy_loose ]
 countryName             = optional
 stateOrProvinceName     = optional
 localityName            = optional
@@ -57,12 +47,10 @@ emailAddress            = optional
 [ req ]
 default_bits        = 4096
 default_md          = sha512
-default_keyfile     = $dir/default.key
 distinguished_name  = req_distinguished_name
-attributes          = req_attributes
-req_extensions      = v3_req
-x509_extensions     = v3_ca
 string_mask         = utf8only
+attributes          = req_attributes
+x509_extensions     = v3_intermediate_ca
 
 [ req_distinguished_name ]
 countryName             = Country Name (2 letter code)
@@ -82,25 +70,52 @@ countryName_default            = US
 stateOrProvinceName_default    = Texas
 localityName_default           = Arlington
 0.organizationName_default     = BlackLakeSoftware
-organizationalUnitName_default = Applications
+organizationalUnitName_default = CertMan
 emailAddress                   = dpneumo@gmail.com
 
 [ req_attributes ]
 
-[ v3_req ]
-basicConstraints        = CA:FALSE
+[ v3_ca ]
+# Extensions for a typical CA (`man x509v3_config`)
+basicConstraints        = critical, CA:TRUE
 subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid:always
+keyUsage                = critical, digitalSignature, cRLSign, keyCertSign
+subjectAltName          = email:move
+
+[ v3_intermediate_ca ]
+# Extensions for a typical intermediate CA (`man x509v3_config`).
+basicConstraints        = critical, CA:TRUE, pathlen:0
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid:always
+keyUsage                = critical, digitalSignature, cRLSign, keyCertSign
+subjectAltName          = email:move
 
 [ usr_cert ]
-basicConstraints       = CA:FALSE
-subjectKeyIdentifier   = hash
-authorityKeyIdentifier = keyid,issuer
-keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
-subjectAltName         = blacklakesoftware.com
-
-[ v3_ca ]
-basicConstraints        = CA:TRUE, pathlen:3
+basicConstraints        = CA:FALSE
+nsCertType              = client, email
+nsComment               = "OpenSSL Generated Client Certificate"
 subjectKeyIdentifier    = hash
-authorityKeyIdentifier  = keyid:always,issuer:always
-keyUsage                = cRLSign, keyCertSign
-subjectAltName          = email:move
+authorityKeyIdentifier  = keyid
+keyUsage = critical, digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName          = blacklakesoftware.com
+extendedKeyUsage        = clientAuth, emailProtection
+
+[ server_cert ]
+basicConstraints        = CA:FALSE
+nsCertType              = server
+nsComment               = "OpenSSL Generated Server Certificate"
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid
+keyUsage                = critical, digitalSignature, keyEncipherment
+extendedKeyUsage        = serverAuth
+
+[ crl_ext ]
+authorityKeyIdentifier  = keyid:always
+
+[ ocsp ]
+basicConstraints        = CA:FALSE
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid
+keyUsage                = critical, digitalSignature
+extendedKeyUsage        = critical, OCSPSigning

@@ -76,11 +76,6 @@ touch ~/.ssh/authorized_keys
 sudo chmod 600 ~/.ssh/id_rsa      /etc/ssh/sshd_config
 sudo chmod 644 ~/.ssh/id_rsa.pub ~/.ssh/known_hosts ~/.ssh/authorized_keys
 
-printf "========= Install OpenSSL =========================\n"
-sudo yum install openssl -y
-cp $SRC/openssl/setup_ca.sh       setup_ca.sh
-chmod +x setup_ca.sh
-
 printf "========= Install certbot (Let's Encrypt) =========\n"
 # Install certbot (Let's Encrypt)
 #sudo yum install certbot -y
@@ -184,27 +179,81 @@ rbenv global 2.5.1
 rbenv rehash
 gem install bundler --no-document
 
+printf "========= Install OpenSSL =========================\n\n"
+sudo yum install openssl -y
+
+printf "========= Set useful openssl aliases ==========\n"
+cat <<EOT >> ~/.bash_profile
+# useful openssl aliases
+alias cert='openssl x509 -noout -text -in'
+alias req='openssl req -noout -text -in'
+alias crl='openssl crl -noout -text -in'
+EOT
+source ~/.bash_profile
+
+printf "========= Prepare CA dirs ==========\n"
+# Prepare root CA directories in dir CA
+mkdir -p CA && cd CA
+mkdir -p certs newcerts crl private
+chmod 700 private
+touch index.txt
+if [[ ! -e 'serial' ]]; then
+  echo '1000' > serial
+fi
+if [[ ! -e 'crlnumber' ]]; then
+  echo '1000' > crlnumber
+fi
+# Prepare intermediate CA directories in dir CA/intermediate
+mkdir -p intermediate && cd intermediate
+mkdir -p certs newcerts crl csr private
+chmod 700 private
+touch index.txt
+if [[ ! -e 'serial' ]]; then
+  echo '1000' > serial
+fi
+if [[ ! -e 'crlnumber' ]]; then
+  echo '1000' > crlnumber
+fi
+
+printf "========= Place CA scripts ==========\n"
+cp $SRC/openssl/prep_ca.sh              prep_ca.sh
+cp $SRC/openssl/setup_rootca.sh         setup_rootca.sh
+cp $SRC/openssl/setup_blacklakeca.sh    setup_blacklakeca.sh
+cp $SRC/openssl/stratus_server_cert.sh  stratus_server_cert.sh
+chmod +x *.sh
+
 printf "========= Manual tasks that must be done ==========\n"
-cp $SRC/finalize/final_steps.sh final_steps.sh
+FIN='/vagrant/finalize'
+cp $FIN/final_steps.sh         final_steps.sh
 chmod +x final_steps.sh
 
 read -r -d '' REMAINING_TASKS <<EOT
 ***************************************
 Remaining Manual tasks:
 From the host:
-  $vagrant ssh
+  vagrant ssh
 
 From /home/vagrant on vm:
-  $subj=stratus $gapppass=googleapppasswrd ./final_steps.sh
+  gapppass=<google app passwrd> ./start_postfix.sh
+  ./setup_rootca.sh
+  ./setup_blacklakeca.sh
+
+  ipaddr=$(ip route get 8.8.8.8 | awk '{print $7}')
+  SUBJ_IP=$ipaddr ./stratus_server_cert.sh
+
+  ./final_steps.sh
 
   This will:
     1. Set Google App Password for postfix
-    2. Run setup_ca.sh from /home/vagrant on vm
+    2. Setup the self signed root CA
+    3. Setup the blacklake intermediate CA
+    4. Create the stratus server cert
     3. Copy certs from CA/ to cirrus/config/certs/
     4. (Re)start nginx
     5. Start the Rails app
 
 Finally add cacert.pem to trusted root certs:
+  Currently certs are in: Libraries/Projects/ansible/cirrus/config/certs/
   - Windows:
       1. Chrome and IE
             Use mmc (Start > mmc > enter)
