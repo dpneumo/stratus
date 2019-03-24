@@ -20,8 +20,11 @@ Vagrant.configure("2") do |config|
     stratus.vm.synced_folder  "C:/bench/cummulus",
                               "/home/vagrant/cummulus",
                               mount_options: ["dmode=755", "fmode=644"]
-    stratus.vm.network "forwarded_port", guest: 3000, host: 3000
-    stratus.vm.network "public_network", bridge: BridgedInterfaces.new.preferred&.[]('Name')
+    stratus.vm.network "forwarded_port",
+                        guest: 3000,
+                        host: 3000
+    stratus.vm.network "public_network",
+                       bridge: BridgedInterfaces.new.preferred&.[]('Name')
     stratus.vm.boot_timeout = 600
     stratus.vm.provider "virtualbox" do |vb|
       vb.memory = "256"
