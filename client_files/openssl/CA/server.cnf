@@ -20,7 +20,7 @@ RANDFILE         = $dir/private/.rand
 
 crl_dir          = $dir/crl
 crlnumber        = $dir/crlnumber
-crl              = $crl_dir/blacklakeca.crl.pem
+crl              = $crl_dir/blacklakeca.crl
 crl_extensions   = crl_ext
 default_crl_days = 30
 
@@ -28,10 +28,10 @@ default_md       = sha512
 
 nameopt          = ca_default
 certopt          = ca_default
-default_days     = 1095
+default_days     = 365
 preserve         = no
 policy           = policy_loose
-email_in_dn      = yes
+email_in_dn      = no
 unique_subject   = no
 
 [ policy_loose ]
@@ -50,7 +50,7 @@ default_md          = sha512
 distinguished_name  = req_distinguished_name
 string_mask         = utf8only
 attributes          = req_attributes
-x509_extensions     = v3_intermediate_ca
+x509_extensions     = server_cert
 
 [ req_distinguished_name ]
 countryName             = Country Name (2 letter code)
@@ -67,12 +67,22 @@ emailAddress_max        = 64
 
 [ req_attributes ]
 
-[ v3_intermediate_ca ]
-basicConstraints        = critical, CA:TRUE, pathlen:0
+[ server_cert ]
+basicConstraints        = CA:FALSE
+nsCertType              = server
+nsComment               = "OpenSSL Generated Server Certificate"
 subjectKeyIdentifier    = hash
-authorityKeyIdentifier  = keyid:always
-keyUsage                = critical, digitalSignature, cRLSign, keyCertSign
-subjectAltName          = email:move
+authorityKeyIdentifier  = keyid
+keyUsage                = critical, digitalSignature, keyEncipherment
+extendedKeyUsage        = serverAuth
+subjectAltName          = @alt_names
+
+[alt_names]
+#DNS.1 = blacklakecode.com
+#IP.1  = 99.61.131.56
+DNS.2 = stratus.attlocal.net
+DNS.3 = stratus
+IP.2  = ${ENV::SUBJ_IP}
 
 [ crl_ext ]
 authorityKeyIdentifier  = keyid:always
