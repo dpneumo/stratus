@@ -18,15 +18,10 @@ class BridgedInterfaces
 
   def preferred
     @parser.parse(@if_list.runcmd)
-    .select {|ifc| usable?(ifc) }
+    .select {|ifc| ifc['Status'] == 'Up' }
     .sort_by {|ifc| ifc['Wireless'] }
     .first
     .tap {|ifc| puts IFCNOTAVAIL if ifc.nil? }
   end
-
-  private
-    def usable?(ifc)
-      ifc['Status'] == 'Up' && !ifc['Wireless'].empty?
-    end
 end
 
