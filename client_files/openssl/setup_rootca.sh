@@ -15,6 +15,9 @@ chmod 644 'CA/rootca.cnf'
 
 # Build the root CA certificate
 printf "========= Building root CA with rootca.cnf ==========\n"
+# Generate root CA csr and the self signed cert in one go.
+# Also creates and saves private key. Unencrypted!
+# Remove -nodes to password protect private key
 openssl req -new  -subj $casubj \
             -nodes -newkey rsa:4096 \
             -keyout 'CA/private/rootca.key.pem' \

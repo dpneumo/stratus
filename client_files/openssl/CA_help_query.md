@@ -1,8 +1,10 @@
+Stack Exchange
+
 A project needed an ssl server cert. As an educational exercise (and clear overkill for the project) I created a certificate chain using openssl: rootca > blacklakeca > stratus server cert.
 
 openssl verification of the certs fails. Adding the rootca.cert.pem and blacklake.cert.pem to the CentOS 7 certificate store does not allow stratus.cert.pem to be trusted. However, adding rootca.cert.pem to the Windows 7 Trusted Root Certification Authorities and blacklakeca.cert.pem to Intermediate Certification Authorities does allow the server certificate, stratus.cert.pem, to be trusted. The openssl verify results suggest that the rootca is the problem. but I can't see it.
 
-I can provide the cnf files and the scripts used to generate the certs. However, I think the problem should be visible in the cert itself.
+I provide the cnf files and the scripts used to generate the certs in this gist. https://gist.github.com/dpneumo/93ef62481f83e4634b36934e7d3d1ea4 However, I think the problem should be visible in the cert itself.
 
 Why can't this cert intended as a Root CA be verified by openssl verify?
 ```

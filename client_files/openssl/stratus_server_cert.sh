@@ -17,6 +17,7 @@ chmod 644 $CAint'/server.cnf'
 printf "========= Server certificate with server.cnf ==========\n"
 # Generate Server csr
 # Also creates and saves private key. Unencrypted!
+# Remove -nodes to password protect private key
 printf "========= Server csr with server.cnf ==========\n"
 openssl req -new -subj $servsubj \
             -nodes -sha512 \

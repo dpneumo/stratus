@@ -40,3 +40,9 @@ cd "C:\Program Files\Oracle\VirtualBox"
 
 redis-cli info:  redis.io/topics/rediscli
 redis setup Gist: gist.github.com/dpneumo/74a184eb67922492230fcb65786f199b
+
+
+# To reset the Centos 7 CA cert store see this article:
+https://access.redhat.com/solutions/1549003
+
+Run the commands as root: Use sudo su.

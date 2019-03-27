@@ -17,6 +17,7 @@ chmod 644 $CAint'/blacklakeca.cnf'
 printf "\n========= Build intermediate CA with blacklakeca.cnf ==========\n"
 # Generate intermediate CA csr
 # Also creates and saves private key. Unencrypted!
+# Remove -nodes to password protect private key
 printf "========= blacklakeca csr with blacklakeca.cnf ==========\n"
 openssl req -new -subj $casubj \
             -nodes -sha512 \
