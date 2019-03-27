@@ -46,3 +46,15 @@ redis setup Gist: gist.github.com/dpneumo/74a184eb67922492230fcb65786f199b
 https://access.redhat.com/solutions/1549003
 
 Run the commands as root: Use sudo su.
+
+# To insert certs into Centos 7 trusted certs store:
+
+copy your certificates inside
+
+/etc/pki/ca-trust/source/anchors/
+
+then run the following command
+
+update-ca-trust
+
+
