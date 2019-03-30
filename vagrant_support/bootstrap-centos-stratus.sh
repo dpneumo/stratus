@@ -17,7 +17,7 @@ sudo yum install -y gettext-devel perl-CPAN perl-devel zlib-devel nano expect tc
 printf "========= Setup iptables logging ==================\n\n"
 sudo touch /var/log/iptables.log
 sudo cp $SRC/iptables/rsyslog.conf   /etc/rsyslog.d/20-iptables.conf
-sudo cp $SRC/iptables/logrotate.conf /etc/logrotate.d/iptables
+sudo cp $SRC/iptables/logrotate.conf /etc/logrotate.d/iptables/
 sudo chmod 666 /var/log/iptables.log
 sudo chmod 644 /etc/rsyslog.d/20-iptables.conf
 sudo chmod 644 /etc/logrotate.d/iptables
@@ -65,9 +65,15 @@ sudo systemctl start fail2ban
 sudo systemctl enable fail2ban
 
 printf "========= ssh files ===============================\n"
+# See https://stribika.github.io/2015/01/04/secure-secure-shell.html
 ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
 sudo mv /etc/ssh/sshd_config       /etc/ssh/sshd_config.$(date +%s)
+sudo mv /etc/ssh/ssh_config        /etc/ssh/ssh_config.$(date +%s)
+sudo cp /etc/ssh/moduli /etc/ssh/moduli.$(date +%s)
+sudo awk '$5 > 2000' /etc/ssh/moduli > "${HOME}/moduli"
+sudo mv "${HOME}/moduli" /etc/ssh/moduli
 sudo cp $SRC/ssh/sshd_config       /etc/ssh/
+sudo cp $SRC/ssh/ssh_config        /etc/ssh/
 touch ~/.ssh/known_hosts
 touch ~/.ssh/authorized_keys
 sudo chmod 600 ~/.ssh/id_rsa      /etc/ssh/sshd_config
@@ -79,12 +85,12 @@ printf "========= Install certbot (Let's Encrypt) =========\n"
 sudo yum install python2-certbot-nginx -y
 
 printf "========= Install nginx ===========================\n"
-sudo cp $SRC/nginx/nginx.repo   /etc/yum.repos.d/nginx.repo
+sudo cp $SRC/nginx/nginx.repo   /etc/yum.repos.d/
 sudo yum update -y
 sudo yum install nginx -y
 sudo mv /etc/nginx/nginx.conf   /etc/nginx/nginx.conf.$(date +%s)
-sudo cp $SRC/nginx/nginx.conf   /etc/nginx/nginx.conf
-sudo cp $SRC/nginx/stratus.conf /etc/nginx/conf.d/stratus.conf
+sudo cp $SRC/nginx/nginx.conf   /etc/nginx/
+sudo cp $SRC/nginx/stratus.conf /etc/nginx/conf.d/
 sudo chmod 644 /etc/nginx/nginx.conf
 sudo chmod 644 /etc/nginx/conf.d/*
 sudo touch /var/log/nginx/error.log
@@ -247,9 +253,11 @@ From /home/vagrant on vm:
     2. Setup the self signed root CA
     3. Setup the blacklake intermediate CA
     4. Create the stratus server cert
-    3. Copy certs from CA/ to cirrus/config/certs/
-    4. (Re)start nginx
-    5. Start the Rails app
+    5. Copy certs from CA/ to cirrus/config/certs/
+    6. (Re)start nginx
+    7. Start the Rails app
+    8. Restart ssh server to use hardened configuration
+
 
 Finally add cacert.pem to trusted root certs:
   Currently certs are in: Libraries/Projects/ansible/cirrus/config/certs/
@@ -258,7 +266,8 @@ Finally add cacert.pem to trusted root certs:
             Use mmc (Start > mmc > enter)
       2. Firefox
             Options > Privacy and Security > View Certificates >
-            Authorities tab > Import > cirrus/config/certs/cacert.pem
+            Authorities tab > Import > cirrus/config/certs/rootca.cert.pem
+            && stratusca.cert.pem
 EOT
 
 echo "$REMAINING_TASKS"

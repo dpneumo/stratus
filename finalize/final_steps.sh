@@ -20,4 +20,7 @@ bundle install
 bundle exec rails db:migrate
 bundle exec rails server
 
+printf "\n========= Restart SSH server ======================\n"
+sudo systemctl restart sshd.service
+
 printf "\n========= Done ====================================\n"

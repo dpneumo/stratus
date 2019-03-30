@@ -1,13 +1,17 @@
-# Server Authentication
+# Listen:
+ListenAddress 127.0.0.1:22
+ListenAddress 10.0.2.15:22
+
+# Key Exchange:
+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+
+# Server Authentication:
 Protocol 2
 HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_ed25519_key
 
-# Logging
-SyslogFacility AUTHPRIV
-LogLevel VERBOSE
-
-# Authentication:
+# User Authentication:
+AllowUsers vagrant
 PermitRootLogin no
 PubkeyAuthentication yes
 AuthorizedKeysFile      .ssh/authorized_keys
@@ -16,18 +20,26 @@ PermitEmptyPasswords no
 ChallengeResponseAuthentication no
 UsePAM yes
 
-X11Forwarding yes
+# Encryption:
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
 
-# No default banner path
-#Banner none
+# Logging:
+SyslogFacility AUTHPRIV
+LogLevel VERBOSE
 
-# Accept locale-related environment variables
+# Accept locale-related environment variables:
 AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
 AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
 AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
 AcceptEnv XMODIFIERS
 
-# override default of no subsystems
+# Allowed subsystems:
 Subsystem       sftp    /usr/libexec/openssh/sftp-server
 
+# Misc:
+Banner none
+X11Forwarding no
 UseDNS no
+
+
