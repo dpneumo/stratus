@@ -8,9 +8,6 @@ sudo yum clean all
 sudo rm -rf /var/cache/yum/*
 sudo yum update -y
 
-# Install EPEL
-sudo yum install epel-release -y
-
 printf "========= Install Development tools ===============\n"
 # Development tools
 sudo yum groups mark convert "Development Tools"
@@ -82,6 +79,8 @@ printf "========= Install certbot (Let's Encrypt) =========\n"
 sudo yum install python2-certbot-nginx -y
 
 printf "========= Install nginx ===========================\n"
+sudo cp $SRC/nginx/nginx.repo   /etc/yum.repos.d/nginx.repo
+sudo yum update -y
 sudo yum install nginx -y
 sudo mv /etc/nginx/nginx.conf   /etc/nginx/nginx.conf.$(date +%s)
 sudo cp $SRC/nginx/nginx.conf   /etc/nginx/nginx.conf
