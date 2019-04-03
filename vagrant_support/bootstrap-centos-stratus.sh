@@ -184,6 +184,12 @@ rbenv global 2.5.1
 rbenv rehash
 gem install bundler --no-document
 
+printf "========= Install Sidekiq          ================\n"
+gem install sidekiq
+cp $SRC/sidekiq/sidekiq.service /usr/lib/systemd/system/
+sudo systemctl enable sidekiq
+sudo systemctl start sidekiq
+
 printf "========= Install OpenSSL =========================\n\n"
 sudo yum install openssl -y
 
