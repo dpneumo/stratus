@@ -133,23 +133,17 @@ sudo chmod 644 /etc/redis/*
 
 sudo adduser --system --no-create-home redis
 
-sudo mkdir -p /var/redis/redis_sidekiq
-sudo chown redis:redis /var/redis/redis_sidekiq
-sudo chmod 770 /var/redis/redis_sidekiq
-
-sudo mkdir -p /var/redis/redis_cache
-sudo chown redis:redis /var/redis/redis_cache
-sudo chmod 770 /var/redis/redis_cache
+sudo mkdir -p /var/redis/redis_stratus
+sudo chown redis:redis /var/redis/redis_stratus
+sudo chmod 770 /var/redis/redis_stratus
 
 sudo cp $SRC/redis/40-redis.conf    /usr/lib/sysctl.d/
 sudo chmod 644 /usr/lib/sysctl.d/40-redis.conf
 sudo sysctl vm.overcommit_memory=1
 
 sudo cp $SRC/redis/*.service        /etc/systemd/system/
-sudo systemctl start redis_sidekiq
-sudo systemctl enable redis_sidekiq
-sudo systemctl start redis_cache
-sudo systemctl enable redis_cache
+sudo systemctl start redis_stratus
+sudo systemctl enable redis_stratus
 cd ~/
 
 printf "========= Install ruby build environment ==========\n"

@@ -1,11 +1,11 @@
 [Unit]
-Description=Redis_Sidekiq In-Memory Data Store
+Description=Redis_Stratus In-Memory Data Store
 After=network.target
 
 [Service]
 User=redis
 Group=redis
-ExecStart=/usr/local/bin/redis-server /etc/redis/redis_sidekiq.conf
+ExecStart=/usr/local/bin/redis-server /etc/redis/redis_stratus.conf
 ExecStop=/usr/local/bin/redis-cli shutdown
 Restart=always
 
