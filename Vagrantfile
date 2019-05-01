@@ -20,9 +20,9 @@ Vagrant.configure("2") do |config|
     stratus.vm.synced_folder  "C:/bench/cummulus",
                               "/home/vagrant/cummulus",
                               mount_options: ["dmode=755", "fmode=644"]
-    stratus.vm.network "forwarded_port",
-                        guest: 3000,
-                        host: 3000
+    #stratus.vm.network "forwarded_port",
+    #                    guest: 3000,
+    #                    host: 3000
     # If VB can't find a bridged network, do 'vagrant halt'
     # then in VirtualBox Manager be certain that NO adapter is attached to a 'Bridged Adapter'.
     # Finally do 'vagrant up'.

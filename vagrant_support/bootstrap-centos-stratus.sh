@@ -14,6 +14,11 @@ sudo yum groups mark convert "Development Tools"
 sudo yum group install -y "Development Tools"
 sudo yum install -y gettext-devel perl-CPAN perl-devel zlib-devel nano expect tcl
 
+printf "========= Stop & disable rpcbind ===============\n"
+sudo systemctl stop rpcbind
+sudo systemctl stop rpcbind.socket
+sudo systemctl disable rpcbind
+
 printf "========= Setup iptables logging ==================\n\n"
 sudo touch /var/log/iptables.log
 sudo cp $SRC/iptables/rsyslog.conf   /etc/rsyslog.d/20-iptables.conf

@@ -44,8 +44,8 @@ GHUB_IP="192.30.253.112 192.30.253.113"
 
 # WAN chains ###############################
  # HTTP Server (to vagrant host on public ip)
- iptables -A wan_in  -s $HOST -p tcp --dport 3000 -m state --state NEW,ESTABLISHED -j ACCEPT
- iptables -A wan_out -d $HOST -p tcp --sport 3000 -m state --state ESTABLISHED     -j ACCEPT
+ # iptables -A wan_in  -s $HOST -p tcp --dport 3000 -m state --state NEW,ESTABLISHED -j ACCEPT
+ # iptables -A wan_out -d $HOST -p tcp --sport 3000 -m state --state ESTABLISHED     -j ACCEPT
 
  # HTTP & HTTPS Server (to world)
  iptables -A wan_in  -p tcp --dport   80 -m state --state NEW,ESTABLISHED -j ACCEPT
@@ -102,8 +102,8 @@ GHUB_IP="192.30.253.112 192.30.253.113"
  #iptables -A lan_out -j ACCEPT
 
  # HTTP Server (to local)
- iptables -A lan_in  -p tcp --dport 3000 -m state --state NEW,ESTABLISHED -j ACCEPT
- iptables -A lan_out -p tcp --sport 3000 -m state --state ESTABLISHED     -j ACCEPT
+ # iptables -A lan_in  -p tcp --dport 3000 -m state --state NEW,ESTABLISHED -j ACCEPT
+ # iptables -A lan_out -p tcp --sport 3000 -m state --state ESTABLISHED     -j ACCEPT
 
  # SSH Server
  iptables -A lan_in  -p tcp --dport   22 -m state --state NEW,ESTABLISHED -j ACCEPT
