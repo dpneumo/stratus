@@ -9,6 +9,9 @@ bantime  = 3600
 findtime = 3600
 maxretry = 6
 
+# This backend is needed for Centos
+backend = systemd
+
 # email notifications
 mta        = sendmail
 destemail  = dpneumo@gmail.com

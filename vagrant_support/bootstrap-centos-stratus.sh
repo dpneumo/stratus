@@ -56,8 +56,7 @@ git config --global user.email dpneumo@gmail.com
 git config --global push.default simple
 
 printf "========= Install Fail2Ban ==========================\n"
-git clone https://github.com/fail2ban/fail2ban.git
-sudo python setup.py install
+sudo yum install fail2ban -y
 sudo cp $SRC/fail2ban/fail2ban.local   /etc/fail2ban/
 sudo cp $SRC/fail2ban/jail.local       /etc/fail2ban/
 sudo cp $SRC/fail2ban/jail.d/*.local   /etc/fail2ban/jail.d/
