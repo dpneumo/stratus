@@ -11,10 +11,10 @@ Vagrant.configure("2") do |config|
     stratus.vm.box = "geerlingguy/centos7"
     stratus.vm.box_version = "1.2.10"
     stratus.vm.hostname = "stratus"
-    stratus.vm.synced_folder  "C:/Users/loco/My Projects/ansible/cirrus",
+    stratus.vm.synced_folder  "C:/Users/dpneu/Projects/ansible/cirrus",
                               "/home/vagrant/cirrus",
                               mount_options: ["dmode=755", "fmode=644"]
-    stratus.vm.synced_folder  "C:/Users/loco/My Projects/ansible/pk2do",
+    stratus.vm.synced_folder  "C:/Users/dpneu/Projects/ansible/pk2do",
                               "/home/vagrant/ansible",
                               mount_options: ["dmode=755", "fmode=644"]
     stratus.vm.synced_folder  "C:/bench/cummulus",
