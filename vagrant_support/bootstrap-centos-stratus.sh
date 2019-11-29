@@ -6,13 +6,19 @@ SRC='/vagrant/client_files'
 # Bring the box up to date
 sudo yum clean all
 sudo rm -rf /var/cache/yum/*
+sudo yum install deltarpm -y
+sudo yum install https://centos7.iuscommunity.org/ius-release.rpm -y
+sudo yum install epel-release -y
 sudo yum update -y
 
 printf "========= Install Development tools ===============\n"
-# Development tools
 sudo yum groups mark convert "Development Tools"
-sudo yum group install -y "Development Tools"
-sudo yum install -y gettext-devel perl-CPAN perl-devel zlib-devel nano expect tcl
+sudo yum group install "Development Tools" -y
+sudo yum install gettext-devel perl-CPAN perl-devel zlib-devel nano expect tcl -y
+
+printf "========= Install Python 3.6 ===================\n"
+sudo yum install python36u python36u-libs python36u-devel python36u-pip -y
+python3.6 -V
 
 printf "========= Stop & disable rpcbind ===============\n"
 sudo systemctl stop rpcbind
