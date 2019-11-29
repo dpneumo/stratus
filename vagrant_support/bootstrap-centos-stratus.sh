@@ -95,9 +95,7 @@ sudo chmod 600 ~/.ssh/id_rsa      /etc/ssh/sshd_config
 sudo chmod 644 ~/.ssh/id_rsa.pub ~/.ssh/known_hosts ~/.ssh/authorized_keys
 
 printf "========= Install certbot (Let's Encrypt) =========\n"
-# Install certbot (Let's Encrypt)
-#sudo yum install certbot -y
-sudo yum install python2-certbot-nginx -y
+sudo yum install certbot python2-certbot-nginx -y
 
 printf "========= Install nginx ===========================\n"
 sudo cp $SRC/nginx/nginx.repo   /etc/yum.repos.d/
@@ -291,6 +289,9 @@ Finally add cacert.pem to trusted root certs:
             Options > Privacy and Security > View Certificates >
             Authorities tab > Import > cirrus/config/certs/rootca.cert.pem
             && stratusca.cert.pem
+
+You may want to automate LetsEncrypt cert renewal:
+  echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew" | sudo tee -a /etc/crontab > /dev/null
 EOT
 
 echo "$REMAINING_TASKS"
