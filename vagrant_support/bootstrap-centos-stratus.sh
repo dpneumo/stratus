@@ -183,15 +183,23 @@ eval "\$(rbenv init -)"
 EOT
 source ~/.bash_profile
 
-printf "========= Install a ruby & bundler ================\n"
+printf "========= Install a ruby ==========================\n"
 rbenv install 2.5.1
 rbenv global 2.5.1
 rbenv rehash
-gem install bundler --no-document
 
-printf "========= Install Sidekiq          ================\n"
+printf "=== Don't install documentation with gem install ==\n"
+touch .gemrc
+cat <<EOT >> .gemrc
+gem: --no-document
+EOT
+
+printf "========= Install bundler =========================\n"
+gem install bundler
+
+printf "========= Install Sidekiq =========================\n"
 gem install sidekiq
-cp $SRC/sidekiq/sidekiq.service /usr/lib/systemd/system/
+sudo cp $SRC/sidekiq/sidekiq.service /usr/lib/systemd/system/
 sudo systemctl enable sidekiq
 sudo systemctl start sidekiq
 
