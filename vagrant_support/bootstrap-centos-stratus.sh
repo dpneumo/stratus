@@ -74,6 +74,11 @@ sudo /etc/fail2ban/gen_badbots
 sudo systemctl start fail2ban
 sudo systemctl enable fail2ban
 
+printf "========= Install Sendmail ========================\n"
+sudo yum install sendmail -y
+sudo systemctl start sendmail
+sudo systemctl enable sendmail
+
 printf "========= ssh files ===============================\n"
 # See https://stribika.github.io/2015/01/04/secure-secure-shell.html
 ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
