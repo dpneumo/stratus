@@ -137,12 +137,12 @@ make
 make test
 sudo make install
 
+sudo adduser --system --no-create-home redis
+
 sudo mkdir /etc/redis
 sudo cp $SRC/redis/redis_*.conf     /etc/redis/
 sudo chown redis:redis /etc/redis/*
 sudo chmod 644 /etc/redis/*
-
-sudo adduser --system --no-create-home redis
 
 sudo mkdir -p /var/redis/redis_stratus
 sudo chown redis:redis /var/redis/redis_stratus
