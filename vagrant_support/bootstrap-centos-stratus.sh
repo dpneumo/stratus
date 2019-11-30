@@ -134,6 +134,8 @@ cd ~/
 printf "========= Install Redis ===========================\n"
 wget -c http://download.redis.io/redis-stable.tar.gz
 tar -xvzf redis-stable.tar.gz
+rm redis-stable.tar.gz
+
 cd redis-stable
 make
 make test
@@ -241,17 +243,19 @@ if [[ ! -e 'crlnumber' ]]; then
   echo '1000' > crlnumber
 fi
 
-printf "========= Place CA scripts ==========\n"
+printf "========= Place CA scripts ========================\n"
 cp $SRC/openssl/prep_ca.sh              prep_ca.sh
 cp $SRC/openssl/setup_rootca.sh         setup_rootca.sh
 cp $SRC/openssl/setup_blacklakeca.sh    setup_blacklakeca.sh
 cp $SRC/openssl/stratus_server_cert.sh  stratus_server_cert.sh
-chmod +x *.sh
 
-printf "========= Manual tasks that must be done ==========\n"
+printf "========= Setup manual tasks that must be done ====\n"
 FIN='/vagrant/finalize'
 cp $FIN/final_steps.sh         final_steps.sh
-chmod +x final_steps.sh
+cp $FIN/start_postfix.sh       start_postfix.sh
+
+printf "========= Insure home folder scripts are runable ==\n"
+sudo chmod +x *ca.sh
 
 read -r -d '' REMAINING_TASKS <<EOT
 ***************************************
