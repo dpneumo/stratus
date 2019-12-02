@@ -27,8 +27,8 @@ sudo systemctl disable rpcbind
 
 printf "========= Setup iptables logging ==================\n\n"
 sudo touch /var/log/iptables.log
-sudo cp $SRC/iptables/rsyslog.conf   /etc/rsyslog.d/20-iptables.conf
-sudo cp $SRC/iptables/logrotate.conf /etc/logrotate.d/iptables/
+sudo cp $SRC/iptables/rsyslog.conf   /etc/rsyslog.d/20-iptables.conf -fb --suffix=.$(date +%s)
+sudo cp $SRC/iptables/logrotate.conf /etc/logrotate.d/iptables/      -fb --suffix=.$(date +%s)
 sudo chmod 666 /var/log/iptables.log
 sudo chmod 644 /etc/rsyslog.d/20-iptables.conf
 sudo chmod 644 /etc/logrotate.d/iptables
@@ -36,7 +36,7 @@ sudo systemctl restart rsyslog
 
 printf "========= Install iptables and rules ================\n"
 sudo yum install iptables-services -y
-sudo cp $SRC/iptables/rules.sh iptables_rules.sh
+sudo cp $SRC/iptables/rules.sh iptables_rules.sh  -fb --suffix=.$(date +%s)
 sudo touch /var/log/iptables_rules_install.log
 sudo chmod 755 iptables_rules.sh
 sudo chmod 666 /var/log/iptables_rules_install.log
@@ -57,11 +57,11 @@ git config --global push.default simple
 
 printf "========= Install Fail2Ban ==========================\n"
 sudo yum install fail2ban -y
-sudo cp $SRC/fail2ban/fail2ban.local   /etc/fail2ban/
-sudo cp $SRC/fail2ban/jail.local       /etc/fail2ban/
-sudo cp $SRC/fail2ban/jail.d/*.local   /etc/fail2ban/jail.d/
-sudo cp $SRC/fail2ban/filter.d/*.local /etc/fail2ban/filter.d/
-sudo cp $SRC/fail2ban/gen_badbots      /etc/fail2ban/gen_badbots
+sudo cp $SRC/fail2ban/fail2ban.local   /etc/fail2ban/            -fb --suffix=.$(date +%s)
+sudo cp $SRC/fail2ban/jail.local       /etc/fail2ban/            -fb --suffix=.$(date +%s)
+sudo cp $SRC/fail2ban/jail.d/*.local   /etc/fail2ban/jail.d/     -fb --suffix=.$(date +%s)
+sudo cp $SRC/fail2ban/filter.d/*.local /etc/fail2ban/filter.d/   -fb --suffix=.$(date +%s)
+sudo cp $SRC/fail2ban/gen_badbots      /etc/fail2ban/gen_badbots -fb --suffix=.$(date +%s)
 if [[ -e /etc/fail2ban/00-firewalld.conf ]]; then
   sudo rm /etc/fail2ban/jail.d/00-firewalld.conf
 fi
@@ -82,13 +82,11 @@ sudo systemctl enable sendmail
 printf "========= ssh files ===============================\n"
 # See https://stribika.github.io/2015/01/04/secure-secure-shell.html
 ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
-sudo mv /etc/ssh/sshd_config       /etc/ssh/sshd_config.$(date +%s)
-sudo mv /etc/ssh/ssh_config        /etc/ssh/ssh_config.$(date +%s)
 sudo cp /etc/ssh/moduli /etc/ssh/moduli.$(date +%s)
 sudo awk '$5 > 2000' /etc/ssh/moduli > "${HOME}/moduli"
 sudo mv "${HOME}/moduli" /etc/ssh/moduli
-sudo cp $SRC/ssh/sshd_config       /etc/ssh/
-sudo cp $SRC/ssh/ssh_config        /etc/ssh/
+sudo cp $SRC/ssh/sshd_config       /etc/ssh/ -fb --suffix=.$(date +%s)
+sudo cp $SRC/ssh/ssh_config        /etc/ssh/ -fb --suffix=.$(date +%s)
 touch ~/.ssh/known_hosts
 touch ~/.ssh/authorized_keys
 sudo chmod 600 ~/.ssh/id_rsa      /etc/ssh/sshd_config
@@ -98,13 +96,12 @@ printf "========= Install certbot (Let's Encrypt) =========\n"
 sudo yum install certbot python2-certbot-nginx -y
 
 printf "========= Install nginx ===========================\n"
-sudo cp $SRC/nginx/nginx.repo   /etc/yum.repos.d/
+sudo cp $SRC/nginx/nginx.repo   /etc/yum.repos.d/  -fb --suffix=.$(date +%s)
 sudo chmod 644 /etc/yum.repos.d/nginx.repo
 sudo yum update -y
 sudo yum install nginx -y
-sudo mv /etc/nginx/nginx.conf   /etc/nginx/nginx.conf.$(date +%s)
-sudo cp $SRC/nginx/nginx.conf   /etc/nginx/
-sudo cp $SRC/nginx/stratus.conf /etc/nginx/conf.d/
+sudo cp $SRC/nginx/nginx.conf   /etc/nginx/        -fb --suffix=.$(date +%s)
+sudo cp $SRC/nginx/stratus.conf /etc/nginx/conf.d/ -fb --suffix=.$(date +%s)
 sudo chmod 644 /etc/nginx/nginx.conf /etc/nginx/conf.d/*
 sudo touch /var/log/nginx/error.log
 sudo touch /var/log/nginx/access.log
@@ -115,10 +112,8 @@ sudo systemctl enable nginx
 printf "========= Setup Postfix =================  ========\n"
 sudo yum install -y cyrus-sasl-plain
 sudo mkdir /etc/postfix/sasl
-sudo mv /etc/aliases               /etc/aliases.$(date +%s)
-sudo mv /etc/postfix/main.cf       /etc/postfix/main.cf.$(date +%s)
-sudo cp $SRC/postfix/aliases       /etc/
-sudo cp $SRC/postfix/main.cf       /etc/postfix/
+sudo cp $SRC/postfix/aliases       /etc/         -fb --suffix=.$(date +%s)
+sudo cp $SRC/postfix/main.cf       /etc/postfix/ -fb --suffix=.$(date +%s)
 sudo chmod 644 /etc/aliases* /etc/postfix/main.cf*
 sudo newaliases
 # Start postfix in final_steps.sh
@@ -145,7 +140,7 @@ sudo make install
 sudo adduser --system --no-create-home redis
 
 sudo mkdir /etc/redis
-sudo cp $SRC/redis/redis_*.conf     /etc/redis/
+sudo cp $SRC/redis/redis_*.conf     /etc/redis/          -fb --suffix=.$(date +%s)
 sudo chown redis:redis /etc/redis/*
 sudo chmod 644 /etc/redis/*
 
@@ -157,11 +152,11 @@ sudo mkdir -p /var/log/redis
 sudo touch /var/log/redis/redis_stratus.log
 sudo chown redis:redis /var/log/redis_stratus.log
 
-sudo cp $SRC/redis/40-redis.conf    /usr/lib/sysctl.d/
+sudo cp $SRC/redis/40-redis.conf    /usr/lib/sysctl.d/   -fb --suffix=.$(date +%s)
 sudo chmod 644 /usr/lib/sysctl.d/40-redis.conf
 sudo sysctl vm.overcommit_memory=1
 
-sudo cp $SRC/redis/*.service        /etc/systemd/system/
+sudo cp $SRC/redis/*.service        /etc/systemd/system/ -fb --suffix=.$(date +%s)
 sudo chmod 644 /etc/systemd/system/redis_*.service
 sudo systemctl start redis_stratus
 sudo systemctl enable redis_stratus
@@ -209,7 +204,7 @@ gem install bundler
 
 printf "========= Install Sidekiq =========================\n"
 gem install sidekiq
-sudo cp $SRC/sidekiq/sidekiq.service /usr/lib/systemd/system/
+sudo cp $SRC/sidekiq/sidekiq.service /usr/lib/systemd/system/ -fb --suffix=.$(date +%s)
 sudo chmod 644 /usr/lib/systemd/system/sidekiq.service
 sudo systemctl enable sidekiq
 sudo systemctl start sidekiq
@@ -251,15 +246,15 @@ if [[ ! -e 'crlnumber' ]]; then
 fi
 
 printf "========= Place CA scripts ========================\n"
-cp $SRC/openssl/prep_ca.sh              prep_ca.sh
-cp $SRC/openssl/setup_rootca.sh         setup_rootca.sh
-cp $SRC/openssl/setup_blacklakeca.sh    setup_blacklakeca.sh
-cp $SRC/openssl/stratus_server_cert.sh  stratus_server_cert.sh
+cp $SRC/openssl/prep_ca.sh              prep_ca.sh             -fb --suffix=.$(date +%s)
+cp $SRC/openssl/setup_rootca.sh         setup_rootca.sh        -fb --suffix=.$(date +%s)
+cp $SRC/openssl/setup_blacklakeca.sh    setup_blacklakeca.sh   -fb --suffix=.$(date +%s)
+cp $SRC/openssl/stratus_server_cert.sh  stratus_server_cert.sh -fb --suffix=.$(date +%s)
 
 printf "========= Setup manual tasks that must be done ====\n"
 FIN='/vagrant/finalize'
-cp $FIN/final_steps.sh         final_steps.sh
-cp $FIN/start_postfix.sh       start_postfix.sh
+cp $FIN/final_steps.sh         final_steps.sh   -fb --suffix=.$(date +%s)
+cp $FIN/start_postfix.sh       start_postfix.sh -fb --suffix=.$(date +%s)
 
 printf "========= Insure home folder scripts are runable ==\n"
 sudo chmod 755 *ca.sh stratus_server_cert.sh
