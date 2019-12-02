@@ -268,7 +268,7 @@ From the host:
   vagrant ssh
 
 From /home/vagrant on vm:
-  gapppass=<google app passwrd> ./start_postfix.sh
+  sudo gapppass=<google app passwrd> ./start_postfix.sh
   ./setup_rootca.sh
   ./setup_blacklakeca.sh
 
