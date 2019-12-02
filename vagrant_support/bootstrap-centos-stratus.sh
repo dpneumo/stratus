@@ -152,6 +152,10 @@ sudo mkdir -p /var/redis/redis_stratus
 sudo chown redis:redis /var/redis/redis_stratus
 sudo chmod 770 /var/redis/redis_stratus
 
+sudo mkdir -p /var/log/redis
+sudo touch /var/log/redis/redis_stratus.log
+sudo chown redis:redis /var/log/redis_stratus.log
+
 sudo cp $SRC/redis/40-redis.conf    /usr/lib/sysctl.d/
 sudo chmod 644 /usr/lib/sysctl.d/40-redis.conf
 sudo sysctl vm.overcommit_memory=1
