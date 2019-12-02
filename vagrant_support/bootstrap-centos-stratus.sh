@@ -287,6 +287,12 @@ From /home/vagrant on vm:
     7. Start the Rails app
     8. Restart ssh server to use hardened configuration
 
+From /home/vagrant on vm:
+  sudo systemctl edit redis-stratus
+  Enter:
+    [Service]
+    Type=notify]
+  sudo systemctl restart redis_stratus
 
 Finally add cacert.pem to trusted root certs:
   Currently certs are in: Libraries/Projects/ansible/cirrus/config/certs/
