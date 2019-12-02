@@ -28,7 +28,7 @@ sudo systemctl disable rpcbind
 printf "========= Setup iptables logging ==================\n\n"
 sudo touch /var/log/iptables.log
 sudo cp $SRC/iptables/rsyslog.conf   /etc/rsyslog.d/20-iptables.conf -fb --suffix=.$(date +%s)
-sudo cp $SRC/iptables/logrotate.conf /etc/logrotate.d/iptables/      -fb --suffix=.$(date +%s)
+sudo cp $SRC/iptables/logrotate.conf /etc/logrotate.d/iptables       -fb --suffix=.$(date +%s)
 sudo chmod 666 /var/log/iptables.log
 sudo chmod 644 /etc/rsyslog.d/20-iptables.conf
 sudo chmod 644 /etc/logrotate.d/iptables
