@@ -99,13 +99,13 @@ sudo yum install certbot python2-certbot-nginx -y
 
 printf "========= Install nginx ===========================\n"
 sudo cp $SRC/nginx/nginx.repo   /etc/yum.repos.d/
+sudo chmod 644 /etc/yum.repos.d/nginx.repo
 sudo yum update -y
 sudo yum install nginx -y
 sudo mv /etc/nginx/nginx.conf   /etc/nginx/nginx.conf.$(date +%s)
 sudo cp $SRC/nginx/nginx.conf   /etc/nginx/
 sudo cp $SRC/nginx/stratus.conf /etc/nginx/conf.d/
-sudo chmod 644 /etc/nginx/nginx.conf
-sudo chmod 644 /etc/nginx/conf.d/*
+sudo chmod 644 /etc/nginx/nginx.conf /etc/nginx/conf.d/*
 sudo touch /var/log/nginx/error.log
 sudo touch /var/log/nginx/access.log
 sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096
@@ -119,6 +119,7 @@ sudo mv /etc/aliases               /etc/aliases.$(date +%s)
 sudo mv /etc/postfix/main.cf       /etc/postfix/main.cf.$(date +%s)
 sudo cp $SRC/postfix/aliases       /etc/
 sudo cp $SRC/postfix/main.cf       /etc/postfix/
+sudo chmod 644 /etc/aliases* /etc/postfix/main.cf*
 sudo newaliases
 # Start postfix in final_steps.sh
 
@@ -161,6 +162,7 @@ sudo chmod 644 /usr/lib/sysctl.d/40-redis.conf
 sudo sysctl vm.overcommit_memory=1
 
 sudo cp $SRC/redis/*.service        /etc/systemd/system/
+sudo chmod 644 /etc/systemd/system/redis_*.service
 sudo systemctl start redis_stratus
 sudo systemctl enable redis_stratus
 cd ~/
@@ -208,6 +210,7 @@ gem install bundler
 printf "========= Install Sidekiq =========================\n"
 gem install sidekiq
 sudo cp $SRC/sidekiq/sidekiq.service /usr/lib/systemd/system/
+sudo chmod 644 /usr/lib/systemd/system/sidekiq.service
 sudo systemctl enable sidekiq
 sudo systemctl start sidekiq
 
@@ -259,7 +262,7 @@ cp $FIN/final_steps.sh         final_steps.sh
 cp $FIN/start_postfix.sh       start_postfix.sh
 
 printf "========= Insure home folder scripts are runable ==\n"
-sudo chmod +x *ca.sh
+sudo chmod 755 *ca.sh stratus_server_cert.sh
 
 read -r -d '' REMAINING_TASKS <<EOT
 ***************************************
