@@ -41,8 +41,30 @@ Vagrant.configure("2") do |config|
       ip route get 8.8.8.8 | awk '{print $7}' | xargs -I IPADDR echo "BRIDGED IP: IPADDR"
       netstat -rn
     SHELL
-    stratus.vm.provision  :shell,
+=begin    stratus.vm.provision  :shell,
                           path: "vagrant_support/bootstrap-centos-stratus.sh",
+                          privileged: false
+=end
+    stratus.vm.provision  :shell,
+                          path: "vagrant_support/update-box.sh",
+                          privileged: true
+    stratus.vm.provision  :shell,
+                          path: "vagrant_support/development-tools.sh",
+                          privileged: true
+    stratus.vm.provision  :shell,
+                          path: "vagrant_support/no-rpcbind.sh",
+                          privileged: true
+    stratus.vm.provision  :shell,
+                          path: "vagrant_support/iptables.sh",
+                          privileged: true
+    stratus.vm.provision  :shell,
+                          path: "vagrant_support/install-fail2ban.sh",
+                          privileged: true
+    stratus.vm.provision  :shell,
+                          path: "vagrant_support/git.sh",
+                          privileged: false
+    stratus.vm.provision  :shell,
+                          path: "vagrant_support/config-ssh.sh",
                           privileged: false
   end
 
