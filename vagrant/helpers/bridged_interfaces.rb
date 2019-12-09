@@ -1,6 +1,12 @@
 require_relative 'parse_vb_manage_list'
 require_relative 'cmd_runner'
 
+# If VB can't find a bridged network, do 'vagrant halt'
+# then in VirtualBox Manager be certain
+# that NO adapter is attached to a 'Bridged Adapter'.
+# Finally do 'vagrant up'.
+# VB does NOT like changes to adapters while up or suspended!
+
 class BridgedInterfaces
   IFCNOTAVAIL = <<-MSG
     WARNING:

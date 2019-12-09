@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-printf "========= Update Box ====================\n"
+# Run as root
+printf "\n========= Update Box ====================\n"
 yum clean all
 rm -rf /var/cache/yum/*
 yum install deltarpm -y

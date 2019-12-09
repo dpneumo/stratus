@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 SRC='/vagrant/client_files'
 
-printf "========= Install Fail2Ban ==========================\n"
+# Run as root
+printf "\n========= Install Fail2Ban ==========================\n"
 yum install fail2ban -y
 
 cp $SRC/fail2ban/fail2ban.local   /etc/fail2ban/            -fb --suffix=.$(date +%s)
@@ -20,7 +21,3 @@ chmod 755 /etc/fail2ban/gen_badbots
 if [[ -e /etc/fail2ban/00-firewalld.conf ]]; then
   rm /etc/fail2ban/jail.d/00-firewalld.conf
 fi
-
-# Don't start fail2ban until all else is working
-#systemctl start fail2ban
-#systemctl enable fail2ban
