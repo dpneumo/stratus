@@ -22,8 +22,8 @@ module Stack
 
       'web' => {
         'openssl.sh' =>       'unpriv',
-        #'CA-setup.sh' =>      'unpriv',
-        #'install-nginx.sh' => 'priv',
+        'CA-setup.sh' =>      'unpriv',
+        'install-nginx.sh' => 'priv',
       },
 
       'finish' => {
