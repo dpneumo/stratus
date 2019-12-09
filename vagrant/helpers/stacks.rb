@@ -26,9 +26,13 @@ module Stack
         'install-nginx.sh' => 'priv',
       },
 
+      'rails' => {
+        'rails.sh' =>       'unpriv',
+      },
+
       'finish' => {
-        #'finalize-setup.sh' => 'unpriv',
-        #'start_services.sh' => 'priv',
+        'finalize-setup.sh' => 'unpriv',
+        'start-services.sh' => 'priv',
         'cleanup.sh'        => 'unpriv',
       },
 

@@ -3,7 +3,6 @@ FIN='/vagrant/finalize'
 
 # Run unprivileged
 printf "\n========= Setup manual tasks that must be done ====\n"
-cp $FIN/final_steps.sh   final_steps.sh   -fb --suffix=.$(date +%s)
 cp $FIN/start_postfix.sh start_postfix.sh -fb --suffix=.$(date +%s)
 
 printf "\n========= Insure home folder scripts are runable ==\n"

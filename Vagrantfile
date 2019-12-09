@@ -34,6 +34,7 @@ Vagrant.configure("2") do |config|
     sr.run_stack("base")
     sr.run_stack("ruby")
     sr.run_stack("web")
+    sr.run_stack("rails")
     sr.run_stack("finish")
   end
 end
