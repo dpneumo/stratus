@@ -2,7 +2,7 @@
 # Run:  ./prep_ca_dirs.sh
 # will run in user's home dir
 
-cd /home/$(whoami)
+cd ~/
 printf "========= Prep CA dirs ==========\n"
 # Prepare root CA directories in dir CA
 mkdir -p CA && cd CA
@@ -28,11 +28,10 @@ if [[ ! -e 'crlnumber' ]]; then
 fi
 
 
-cd /home/$(whoami)
+cd ~/
 printf "========= Place CA scripts ==========\n"
 SRC='/vagrant/client_files'
 cp $SRC/openssl/setup_rootca.sh               setup_rootca.sh
 cp $SRC/openssl/setup_blacklakeca.sh          setup_blacklakeca.sh
 cp $SRC/openssl/stratus_server_cert.sh        stratus_server_cert.sh
-cp /vagrant/finalize/final_steps.sh           final_steps.sh
 chmod +x *.sh

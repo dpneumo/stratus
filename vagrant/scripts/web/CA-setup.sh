@@ -27,7 +27,9 @@ if [[ ! -e 'crlnumber' ]]; then
 fi
 
 printf "\n========= Place CA scripts ========================\n"
-cp $SRC/openssl/prep_ca.sh              prep_ca.sh             -fb --suffix=.$(date +%s)
-cp $SRC/openssl/setup_rootca.sh         setup_rootca.sh        -fb --suffix=.$(date +%s)
-cp $SRC/openssl/setup_blacklakeca.sh    setup_blacklakeca.sh   -fb --suffix=.$(date +%s)
-cp $SRC/openssl/stratus_server_cert.sh  stratus_server_cert.sh -fb --suffix=.$(date +%s)
+cp $SRC/openssl/prep_ca.sh              prep_ca.sh              -fb --suffix=.$(date +%s)
+cp $SRC/openssl/setup_rootca.sh         setup_rootca.sh         -fb --suffix=.$(date +%s)
+cp $SRC/openssl/setup_organizationca.sh setup_organizationca.sh -fb --suffix=.$(date +%s)
+cp $SRC/openssl/stratus_server_cert.sh  stratus_server_cert.sh  -fb --suffix=.$(date +%s)
+
+mv  *.sh.* bkup/
