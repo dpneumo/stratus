@@ -13,6 +13,9 @@ Vagrant.configure("2") do |config|
     vm.box = "geerlingguy/centos7"
     vm.box_version = "1.2.10"
     vm.hostname = "stratus"
+    vm.synced_folder  "C:/bench/vm-env",
+                      "/home/vagrant/vm-env",
+                      mount_options: ["dmode=755", "fmode=644"]
     vm.synced_folder  "C:/Users/dpneu/Projects/ansible/cirrus",
                       "/home/vagrant/cirrus",
                       mount_options: ["dmode=755", "fmode=644"]

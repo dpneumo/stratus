@@ -1,6 +1,10 @@
 module Stack
   def stacks
     {
+      'env' => {
+        'build-env.sh' =>         'unpriv',
+      },
+
       'base' => {
         'update-box.sh' =>        'priv',
         'development-tools.sh' => 'priv',
