@@ -34,3 +34,5 @@ touch /var/log/ip6tables_rules_install.log
 chmod 755 iptables_rules6.sh
 chmod 666 /var/log/ip6tables_rules_install.log
 ./iptables_rules6.sh >> /var/log/ip6tables_rules_install.log
+
+mv  *.sh.* bkup/
