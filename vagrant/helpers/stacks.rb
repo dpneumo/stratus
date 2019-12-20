@@ -31,7 +31,11 @@ module Stack
       },
 
       'rails' => {
-        'rails.sh' =>       'unpriv',
+        'rails.sh' =>         'unpriv',
+      },
+
+      'demo_app' => {
+        'demo_app.sh' =>      'unpriv',
       },
 
       'finish' => {
