@@ -3,9 +3,13 @@ require_relative 'stacks'
 class ScriptRunner
   include Stack
 
+  # StackList = %w[ base ruby web demo_app ]
+  StackList = %w[ demo_app ]
+
   def initialize(vm:)
     @vm = vm
   end
+  private :initialize
 
   def run_always
     @vm.provision :shell,
@@ -18,12 +22,18 @@ class ScriptRunner
     SHELL
   end
 
+  def run_stacks
+    StackList.each {|stack| run_stack(stack) }
+  end
+
   def run_stack(stack)
-    stacks[stack].each do |script,privilege|
-      @vm.provision :shell,
-                    path: "vagrant/scripts/#{stack}/#{script}",
-                    privileged: (privilege == 'priv')
-    end
+    scripts = stacks[stack]
+    scripts.each {|script,privilege| run_script(stack, script, privilege) }
+  end
+
+  def run_script(stack, script, privilege)
+    @vm.provision :shell,
+                  path: "vagrant/scripts/#{stack}/#{script}",
+                  privileged: (privilege == 'priv')
   end
 end
-

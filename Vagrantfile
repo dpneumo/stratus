@@ -34,10 +34,6 @@ Vagrant.configure("2") do |config|
     sr = ScriptRunner.new(vm: vm)
     # See vagrant/helpers/stacks.rb for list of scripts in a stack
     sr.run_always
-    sr.run_stack("base")
-    sr.run_stack("ruby")
-    sr.run_stack("web")
-    sr.run_stack("rails")
-    sr.run_stack("finish")
+    sr.run_stacks
   end
 end
