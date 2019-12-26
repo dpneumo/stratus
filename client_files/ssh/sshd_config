@@ -41,5 +41,3 @@ Subsystem       sftp    /usr/libexec/openssh/sftp-server
 Banner none
 X11Forwarding no
 UseDNS no
-
-
