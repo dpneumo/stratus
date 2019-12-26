@@ -16,6 +16,10 @@ chmod 644 /etc/fail2ban/jail.local
 chmod 644 /etc/fail2ban/jail.d/*
 chmod 644 /etc/fail2ban/filter.d/*
 chmod 755 /etc/fail2ban/gen_badbots
+
+sed -ie "s/sender     = sender@email.com/sender     = $F2BSndrEmail/g;s/destemail  = dest@email.com/destemail  = $F2BDestEmail/g" \
+    /etc/fail2ban/jail.local
+
 /etc/fail2ban/gen_badbots
 
 if [[ -e /etc/fail2ban/00-firewalld.conf ]]; then
