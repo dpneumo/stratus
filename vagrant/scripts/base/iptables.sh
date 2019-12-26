@@ -35,4 +35,8 @@ chmod 755 iptables_rules6.sh
 chmod 666 /var/log/ip6tables_rules_install.log
 ./iptables_rules6.sh >> /var/log/ip6tables_rules_install.log
 
-mv  *.sh.* bkup/
+# Cleanup home dir
+if [[ ! -e ~/bkup ]]; then
+  mkdir ~/bkup
+fi
+mv  *.sh.* ~/bkup/

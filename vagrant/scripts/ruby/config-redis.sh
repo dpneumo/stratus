@@ -24,5 +24,3 @@ sysctl vm.overcommit_memory=1
 
 cp $SRC/redis/*.service /etc/systemd/system/   -fb --suffix=.$(date +%s)
 chmod 644 /etc/systemd/system/redis_*.service
-
-mv  *.sh.* bkup/
