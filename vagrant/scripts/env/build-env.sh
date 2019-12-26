@@ -7,4 +7,8 @@ chown vagrant:vagrant base-env.sh
 chmod 755             base-env.sh
 source ./base-env.sh
 
-mv  *.sh.* bkup/
+# Cleanup home dir
+if [[ ! -e ~/bkup ]]; then
+  mkdir ~/bkup
+fi
+mv  *.sh.* ~/bkup/
