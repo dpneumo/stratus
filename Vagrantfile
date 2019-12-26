@@ -2,48 +2,39 @@
 #
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-require_relative 'vagrant_support/bridged_interfaces'
+require_relative 'vagrant/helpers/bridged_interfaces'
+require_relative 'vagrant/helpers/script_runner'
 
 Vagrant.configure("2") do |config|
 
-  # create stratus node
+  # create stratus vm
   config.vm.define :stratus do |stratus|
-    stratus.vm.box = "geerlingguy/centos7"
-    stratus.vm.box_version = "1.2.10"
-    stratus.vm.hostname = "stratus"
-    stratus.vm.synced_folder  "C:/Users/dpneu/Projects/ansible/cirrus",
-                              "/home/vagrant/cirrus",
-                              mount_options: ["dmode=755", "fmode=644"]
-    stratus.vm.synced_folder  "C:/Users/dpneu/Projects/ansible/pk2do",
-                              "/home/vagrant/ansible",
-                              mount_options: ["dmode=755", "fmode=644"]
-    stratus.vm.synced_folder  "C:/bench/cummulus",
-                              "/home/vagrant/cummulus",
-                              mount_options: ["dmode=755", "fmode=644"]
-    #stratus.vm.network "forwarded_port",
-    #                    guest: 3000,
-    #                    host: 3000
-    # If VB can't find a bridged network, do 'vagrant halt'
-    # then in VirtualBox Manager be certain that NO adapter is attached to a 'Bridged Adapter'.
-    # Finally do 'vagrant up'.
-    # VB does NOT like changes to adapters while up or suspended!
-    stratus.vm.network "public_network",
-                       bridge: BridgedInterfaces.new.preferred&.[]('Name')
-    stratus.vm.boot_timeout = 600
-    stratus.vm.provider "virtualbox" do |vb|
+    vm = stratus.vm
+    vm.box = "geerlingguy/centos7"
+    vm.box_version = "1.2.10"
+    vm.hostname = "stratus"
+    vm.synced_folder  "C:/bench/vm-env",
+                      "/home/vagrant/vm-env",
+                      mount_options: ["dmode=755", "fmode=644"]
+    vm.synced_folder  "C:/Users/dpneu/Projects/ansible/cirrus",
+                      "/home/vagrant/cirrus",
+                      mount_options: ["dmode=755", "fmode=644"]
+    vm.synced_folder  "C:/Users/dpneu/Projects/ansible/pk2do",
+                      "/home/vagrant/ansible",
+                      mount_options: ["dmode=755", "fmode=644"]
+    vm.synced_folder  "C:/bench/cummulus",
+                      "/home/vagrant/cummulus",
+                      mount_options: ["dmode=755", "fmode=644"]
+    vm.network  "public_network",
+                bridge: BridgedInterfaces.new.preferred&.[]('Name')
+    vm.boot_timeout = 600
+    vm.provider "virtualbox" do |vb|
       vb.memory = "256"
     end
-    stratus.vm.provision  :shell,
-                          run: "always",
-                          inline: <<-SHELL
-      sudo sed -i 's/DEFROUTE="yes"/DEFROUTE="no"/g' /etc/sysconfig/network-scripts/ifcfg-enp0s3
-      sudo systemctl restart network
-      ip route get 8.8.8.8 | awk '{print $7}' | xargs -I IPADDR echo "BRIDGED IP: IPADDR"
-      netstat -rn
-    SHELL
-    stratus.vm.provision  :shell,
-                          path: "vagrant_support/bootstrap-centos-stratus.sh",
-                          privileged: false
+    sr = ScriptRunner.new(vm: vm)
+    # See vagrant/helpers/stacks.rb for list of scripts in a stack
+    sr.run_always
+    sr.run_stack('env')
+    sr.run_stacks
   end
-
 end

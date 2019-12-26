@@ -12,7 +12,7 @@ data_directory = /var/lib/postfix
 mail_owner = postfix
 
 # INTERNET
-myhostname = stratus.attlocal.net
+myhostname = myhost.mydomain.com
 inet_protocols = ipv4
 
 # SENDING MAIL

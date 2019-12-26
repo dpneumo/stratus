@@ -14,7 +14,7 @@ backend = systemd
 
 # email notifications
 mta        = sendmail
-destemail  = dpneumo@gmail.com
+destemail  = dest@email.com
 sendername = Fail2BanAlerts
-sender      = dpneumo@gmail.com
+sender     = sender@email.com
 action     = %(action_mwl)s
