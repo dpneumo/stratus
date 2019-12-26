@@ -3,6 +3,7 @@ module Stack
     {
       'env' => {
         'build-env.sh' =>         'unpriv',
+        'build-env-priv.sh' =>         'priv',
       },
 
       'base' => {
