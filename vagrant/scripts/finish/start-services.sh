@@ -18,11 +18,11 @@ systemctl restart sidekiq
 systemctl enable sidekiq
 
 printf "========= Stop firewalld & Start iptables============\n"
-sudo systemctl stop firewalld
-sudo systemctl disable firewalld
-sudo systemctl mask firewalld
-sudo systemctl start iptables
-sudo systemctl enable iptables
+systemctl stop firewalld
+systemctl disable firewalld
+systemctl mask firewalld
+systemctl start iptables
+systemctl enable iptables
 
 
 printf "\n========= Restart Fail2Ban ========================\n"
