@@ -3,7 +3,7 @@ SRC='/vagrant/client_files'
 
 # Run as root
 printf "\n========= Restart SSH server ======================\n"
-systemctl restart sshd.service
+systemctl reload sshd.service
 
 printf "\n========= Restart Nginx ===========================\n"
 systemctl restart nginx
