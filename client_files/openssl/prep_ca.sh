@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Run:  ./prep_ca_dirs.sh
 # will run in user's home dir
+SRC='/vagrant/client_files'
 
 cd ~/
 printf "========= Prep CA dirs ==========\n"
@@ -27,10 +28,8 @@ if [[ ! -e 'crlnumber' ]]; then
   echo '1000' > crlnumber
 fi
 
-
-cd ~/
 printf "========= Place CA scripts ==========\n"
-SRC='/vagrant/client_files'
+cd ~/
 cp $SRC/openssl/setup_rootca.sh               setup_rootca.sh
 cp $SRC/openssl/setup_blacklakeca.sh          setup_blacklakeca.sh
 cp $SRC/openssl/stratus_server_cert.sh        stratus_server_cert.sh
