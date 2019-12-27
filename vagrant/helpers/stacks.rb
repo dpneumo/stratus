@@ -19,7 +19,7 @@ module Stack
       'ruby' => {
         'git.sh' =>           'unpriv',
         'rbenv.sh' =>         'unpriv',
-        'ruby-2.5.1.sh' =>    'unpriv',
+        'ruby-2.6.3.sh' =>    'unpriv',
         'sidekiq.sh' =>       'unpriv',
         'install-redis.sh' => 'unpriv',
         'config-redis.sh' =>  'priv',
