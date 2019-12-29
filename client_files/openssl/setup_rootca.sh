@@ -32,3 +32,4 @@ chmod 444 'CA/certs/rootca.cert.pem'
 # Show the rootca cert
 openssl x509 -noout -text \
              -in 'CA/certs/rootca.cert.pem'
+

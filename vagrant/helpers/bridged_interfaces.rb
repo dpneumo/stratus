@@ -30,3 +30,4 @@ class BridgedInterfaces
     .tap {|ifc| puts IFCNOTAVAIL if ifc.nil? }
   end
 end
+

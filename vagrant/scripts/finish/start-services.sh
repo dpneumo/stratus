@@ -34,3 +34,4 @@ printf "\n========= Restart Fail2Ban ========================\n"
 # Don't start fail2ban until all else is working
 #systemctl restart fail2ban
 #systemctl enable fail2ban
+

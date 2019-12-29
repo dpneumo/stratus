@@ -8,3 +8,4 @@ yum install deltarpm -y
 yum install https://centos7.iuscommunity.org/ius-release.rpm -y
 yum install epel-release -y
 yum update -y
+

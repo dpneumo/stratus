@@ -72,3 +72,4 @@ datepattern = ^[^\[]*\[({DATE})
 # Author: Yaroslav Halchenko
 # Revised by: Mitch Kuppinger, March 16, 2019
 EOF
+

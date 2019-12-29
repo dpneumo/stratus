@@ -40,3 +40,4 @@ class ParseVbManageList
     [ k&.strip || '', v&.strip || '' ]
   end
 end
+

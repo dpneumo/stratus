@@ -86,3 +86,4 @@ ip6tables -P OUTPUT DROP
  ip6tables -L -v -n
 
 printf "\n========= New ip6tables rules installed! =========\n"
+

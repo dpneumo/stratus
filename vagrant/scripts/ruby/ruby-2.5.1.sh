@@ -21,3 +21,4 @@ fi
 
 printf "\n========= Install bundler =========================\n"
 gem install bundler
+

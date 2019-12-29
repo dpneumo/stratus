@@ -5,3 +5,4 @@ printf "\n========= Stop & disable rpcbind ===============\n"
 systemctl stop rpcbind
 systemctl stop rpcbind.socket
 systemctl disable rpcbind
+

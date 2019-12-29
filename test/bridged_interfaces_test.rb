@@ -28,3 +28,4 @@ class TestBridgedInterfaces < MiniTest::Test
     assert_nil bi.preferred
   end
 end
+

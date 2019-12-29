@@ -61,3 +61,4 @@ html_directory = no
 manpage_directory = /usr/share/man
 sample_directory = /usr/share/doc/postfix-2.10.1/samples
 readme_directory = /usr/share/doc/postfix-2.10.1/README_FILES
+

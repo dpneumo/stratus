@@ -35,3 +35,4 @@ cp $SRC/openssl/stratus_server_cert.sh  stratus_server_cert.sh
 
 printf "\n========= Insure home dir CA scripts are runable ==\n"
 sudo chmod 755 *ca.sh stratus_server_cert.sh
+

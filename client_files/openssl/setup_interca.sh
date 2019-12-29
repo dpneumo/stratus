@@ -54,3 +54,4 @@ openssl verify -CAfile 'CA/certs/rootca.cert.pem' \
 cat $CAint'/certs/$OrgCACN.cert.pem' \
     'CA/certs/rootca.cert.pem' > $CAint'/certs/$OrgCACN-chain.cert.pem'
 chmod 444 $CAint'/certs/$OrgCACN-chain.cert.pem'
+

@@ -18,3 +18,4 @@ if [[ $ver != 'Redis server'* ]] ; then
 else
   echo "Redis already installed."
 fi
+

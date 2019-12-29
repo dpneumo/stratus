@@ -12,3 +12,4 @@ if [[ ! -e ~/bkup ]]; then
   mkdir ~/bkup
 fi
 mv  *.sh.* ~/bkup/
+

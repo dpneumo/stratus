@@ -34,3 +34,4 @@ chmod 600 id_rsa                        \
           /etc/ssh/sshd_config
 
 cd /home/vagrant
+

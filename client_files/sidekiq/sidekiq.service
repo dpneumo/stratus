@@ -50,3 +50,4 @@ SyslogIdentifier=sidekiq
 
 [Install]
 WantedBy=multi-user.target
+

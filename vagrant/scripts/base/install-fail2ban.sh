@@ -25,3 +25,4 @@ sed -ie "s/sender     = sender@email.com/sender     = $F2BSndrEmail/g;s/destemai
 if [[ -e /etc/fail2ban/00-firewalld.conf ]]; then
   rm /etc/fail2ban/jail.d/00-firewalld.conf
 fi
+

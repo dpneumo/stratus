@@ -53,3 +53,4 @@ openssl x509 -noout -text \
 
 openssl verify -CAfile $CAint'/certs/$OrgCACN-chain.cert.pem' \
                $CAint'/certs/stratus.cert.pem'
+

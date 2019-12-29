@@ -7,3 +7,4 @@ if ENV['COVERAGE']
 end
 
 require 'minitest/autorun'
+

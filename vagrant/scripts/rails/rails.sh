@@ -14,3 +14,4 @@ cd cirrus
 bundle install
 bundle exec rails db:migrate
 cd ..
+

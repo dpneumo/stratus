@@ -31,3 +31,4 @@ sudo cat $PFSASL/sasl_passwd
 
 sudo postmap    $PFSASL/sasl_passwd
 sudo chmod 0600 $PFSASL/sasl_passwd $PFSASL/sasl_passwd.db
+

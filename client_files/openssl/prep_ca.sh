@@ -34,3 +34,4 @@ cp $SRC/openssl/setup_rootca.sh            setup_rootca.sh
 cp $SRC/openssl/setup_interca.sh           setup_interca.sh
 cp $SRC/openssl/stratus_server_cert.sh     stratus_server_cert.sh
 chmod +x *.sh
+

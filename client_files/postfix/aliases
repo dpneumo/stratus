@@ -94,3 +94,4 @@ decode:         root
 
 # Person who should get root's mail
 root:           vagrant
+

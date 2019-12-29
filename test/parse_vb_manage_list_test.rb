@@ -98,3 +98,4 @@ class TestParseVbManageList < MiniTest::Test
       ]
     end
 end
+

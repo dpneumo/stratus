@@ -4,7 +4,8 @@ class ScriptRunner
   include Stack
 
   # StackList = %w[ demo_app ]
-  StackList = %w[ base ruby web rails ]
+  # StackList = %w[ base ruby web rails ]
+  StackList = %w[ base ruby web demo_app ]
 
   def initialize(vm:)
     @vm = vm
@@ -37,3 +38,4 @@ class ScriptRunner
                   privileged: (privilege == 'priv')
   end
 end
+

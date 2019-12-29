@@ -18,3 +18,4 @@ destemail  = dest@email.com
 sendername = Fail2BanAlerts
 sender     = sender@email.com
 action     = %(action_mwl)s
+

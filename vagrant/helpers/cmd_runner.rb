@@ -12,3 +12,4 @@ class CmdRunner
     out
   end
 end
+

@@ -20,4 +20,3 @@ alias crl='openssl crl -noout -text -in'
 TXT
 fi
 source ~/.bash_profile
-
