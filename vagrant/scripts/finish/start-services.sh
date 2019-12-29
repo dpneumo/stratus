@@ -2,8 +2,11 @@
 SRC='/vagrant/client_files'
 
 # Run as root
-printf "\n========= Restart SSH server ======================\n"
+printf "\n========= Reload SSH server =======================\n"
 systemctl reload sshd.service
+
+printf "\n========= Restart Postfix =========================\n"
+systemctl restart postfix
 
 printf "\n========= Restart Nginx ===========================\n"
 systemctl restart nginx
