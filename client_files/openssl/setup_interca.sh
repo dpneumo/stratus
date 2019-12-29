@@ -10,8 +10,9 @@ SRC='/vagrant/client_files'
 CAint='CA/intermediate'
 
 # Install configuration file
-cp $SRC'/openssl/CA/$OrgCACN.cnf' $CAint'/$OrgCACN.cnf'
+cp $SRC'/openssl/CA/interca.cnf' $CAint'/$OrgCACN.cnf'
 chmod 644 $CAint'/$OrgCACN.cnf'
+sed -i "s|interca|$OrgCACN|g" $CAint'/$OrgCACN.cnf'
 
 # Build the intermediate CA certificate
 printf "\n========= Build intermediate CA with $OrgCACN.cnf ==========\n"

@@ -30,6 +30,8 @@ printf "\n========= Place CA scripts in home dir ============\n"
 cd ~
 cp $SRC/openssl/prep_ca.sh              prep_ca.sh
 cp $SRC/openssl/setup_rootca.sh         setup_rootca.sh
-cp $SRC/openssl/setup_organizationca.sh setup_organizationca.sh
+cp $SRC/openssl/setup_interca.sh        setup_interca.sh
 cp $SRC/openssl/stratus_server_cert.sh  stratus_server_cert.sh
 
+printf "\n========= Insure home dir CA scripts are runable ==\n"
+sudo chmod 755 *ca.sh stratus_server_cert.sh

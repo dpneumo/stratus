@@ -20,10 +20,12 @@ printf "\n========= Restart Sidekiq =========================\n"
 systemctl restart sidekiq
 systemctl enable sidekiq
 
-printf "========= Stop firewalld & Start iptables============\n"
+printf "========= Stop firewalld ============================\n"
 systemctl stop firewalld
 systemctl disable firewalld
 systemctl mask firewalld
+
+printf "========= Start iptables ============================\n"
 systemctl start iptables
 systemctl enable iptables
 

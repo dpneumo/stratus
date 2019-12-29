@@ -4,7 +4,7 @@
 
 cd /home/$(whoami)
 
-servsubj='/C=US/ST=Texas/L=Arlington/O=BlackLakeSoftware/OU=Apps/CN=stratus'
+servsubj='/C=US/ST=$StratusState/L=$StratusCity/O=$StratusOrg/OU=$StratusUnit/CN=$StratusCN'
 
 SRC='/vagrant/client_files'
 CAint='CA/intermediate'
@@ -12,6 +12,12 @@ CAint='CA/intermediate'
 # Install configuration file
 cp $SRC'/openssl/CA/server.cnf' $CAint'/server.cnf'
 chmod 644 $CAint'/server.cnf'
+sed -i "s|interca|$OrgCACN|g;\
+        s|dns1|$DNS1|g;\
+        s|ip1|$IP1|g;\
+        s|dns2|$DNS2|g;\
+        s|dns3|$DNS3|g;" \
+        $CAint'/server.cnf'
 
 # Build Server Certificate
 printf "========= Server certificate with server.cnf ==========\n"
@@ -29,10 +35,10 @@ openssl req -new -subj $servsubj \
 chmod 400 $CAint'/private/stratus.key.pem'
 
 # Generate the Server certificate - valid 1 year
-printf "========= Use blacklake CA to generate Server cert ==========\n"
+printf "========= Use $OrgCACN to generate Server cert ==========\n"
 openssl ca -in $CAint'/csr/stratus.csr.pem' \
-           -keyfile $CAint'/private/blacklakeca.key.pem' \
-           -cert $CAint'/certs/blacklakeca.cert.pem' \
+           -keyfile $CAint'/private/$OrgCACN.key.pem' \
+           -cert $CAint'/certs/$OrgCACN.cert.pem' \
            -config $CAint'/server.cnf' \
            -extensions 'server_cert' \
            -notext \
@@ -45,5 +51,5 @@ chmod 444 $CAint'/certs/stratus.cert.pem'
 openssl x509 -noout -text \
              -in $CAint'/certs/stratus.cert.pem'
 
-openssl verify -CAfile $CAint'/certs/blacklakeca-chain.cert.pem' \
+openssl verify -CAfile $CAint'/certs/$OrgCACN-chain.cert.pem' \
                $CAint'/certs/stratus.cert.pem'

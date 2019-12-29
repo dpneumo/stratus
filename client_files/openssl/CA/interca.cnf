@@ -9,8 +9,8 @@ dir              = $HOME/CA/intermediate
 default_ca       = CA_default
 
 [ CA_default ]
-certificate      = $dir/certs/blacklakeca.cert.pem
-private_key      = $dir/private/blacklakeca.key.pem
+certificate      = $dir/certs/interca.cert.pem
+private_key      = $dir/private/interca.key.pem
 
 certs            = $dir/certs
 new_certs_dir    = $dir/newcerts
@@ -20,7 +20,7 @@ RANDFILE         = $dir/private/.rand
 
 crl_dir          = $dir/crl
 crlnumber        = $dir/crlnumber
-crl              = $crl_dir/blacklakeca.crl.pem
+crl              = $crl_dir/interca.crl.pem
 crl_extensions   = crl_ext
 default_crl_days = 30
 
