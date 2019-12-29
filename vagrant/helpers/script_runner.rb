@@ -22,7 +22,7 @@ class ScriptRunner
     SHELL
   end
 
-  def run_stacks
+  def run_stacklist
     StackList.each {|stack| run_stack(stack) }
   end
 
