@@ -1,6 +1,5 @@
 class ParseVbManageList
 # Expects a list (array) structured like this:
-
 # [
 #   "Name:          Mark\n",
 #   "Age:           45\n",

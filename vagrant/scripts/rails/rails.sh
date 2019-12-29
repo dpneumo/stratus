@@ -13,6 +13,4 @@ printf "\n========= Start Rails App =========================\n"
 cd cirrus
 bundle install
 bundle exec rails db:migrate
-#bundle exec rails server
-
-cd ~/
+cd ..
