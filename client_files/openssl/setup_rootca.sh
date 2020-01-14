@@ -4,7 +4,7 @@
 
 cd /home/$(whoami)
 
-casubj='/C=US/ST=$RootCAState/L=$RootCACity/O=$RootCAOName/OU=CertMan/CN=rootca/emailAddress=funnyname@mail.us'
+casubj="/C=US/ST=$RootCAState/L=$RootCACity/O=$RootCAOName/OU=CertMan/CN=rootca/emailAddress=funnyname@mail.us"
 
 SRC='/vagrant/client_files'
 
