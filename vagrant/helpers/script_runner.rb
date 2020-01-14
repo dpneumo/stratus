@@ -6,6 +6,7 @@ class ScriptRunner
   # StackList = %w[ demo_app ]
   # StackList = %w[ base ruby web rails ]
   StackList = %w[ base ruby web demo_app ]
+  # StackList = %w[ base ]
 
   def initialize(vm:)
     @vm = vm
@@ -15,9 +16,8 @@ class ScriptRunner
   def run_always
     @vm.provision :shell,
                   run: "always",
+                  privileged: true,
                   inline: <<-SHELL
-    sed -i 's/DEFROUTE="yes"/DEFROUTE="no"/g' /etc/sysconfig/network-scripts/ifcfg-enp0s3
-    systemctl restart network
     ip route get 8.8.8.8 | awk '{print $7}' | xargs -I IPADDR echo "BRIDGED IP: IPADDR"
     netstat -rn
     SHELL
