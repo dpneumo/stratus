@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run:  ./prep_ca_dirs.sh
+# Run:  ./prep_ca.sh
 # will run in user's home dir
 SRC='/vagrant/client_files'
 
@@ -33,5 +33,5 @@ cd ~/
 cp $SRC/openssl/setup_rootca.sh            setup_rootca.sh
 cp $SRC/openssl/setup_interca.sh           setup_interca.sh
 cp $SRC/openssl/stratus_server_cert.sh     stratus_server_cert.sh
-chmod +x *.sh
+chmod +x *ca.sh stratus_server_cert.sh
 
