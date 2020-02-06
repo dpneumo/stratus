@@ -5,6 +5,7 @@ Rake::TestTask.new do |t|
   t.pattern = 'test/test_*.rb'
   t.warning = true
   t.verbose = true
+  ENV['TESTING'] = 'true'
 end
 
 task :default => :test

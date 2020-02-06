@@ -1,22 +1,21 @@
 class MockRunner
-  def initialize( cmd: ,
-                  vbdir: 'mockdir' )
-    @cmd = cmd
+  def self.run(cmd)
+    mr = self.new
+    case cmd
+    when 'wired_up'
+      mr.wired_up
+    when 'wireless_up'
+      mr.wireless_up
+    when 'both_up'
+      mr.wired_up + mr.wireless_up
+    when 'both_up_reversed'
+      mr.wireless_up + mr.wired_up
+    else  #both down
+      mr.tap_adapt
+    end
   end
 
-  def runcmd
-    case @cmd
-    when 'wired_up'
-      wired_up
-    when 'wireless_up'
-      wireless_up
-    when 'both_up'
-      wired_up + wireless_up
-    when 'both_up_reversed'
-      wireless_up + wired_up
-    else  #both down
-      tap_adapt
-    end
+  def initialize( vbdir: 'mockdir', iorunner: nil )
   end
 
   def wired_up

@@ -12,27 +12,40 @@ class ParseVbManageList
 #   "FavoriteColor: Red\n",
 #   "\n"
 # ]
+# with delimiter: ":"
+
+  attr_reader :delimiter
+  def initialize(delimiter: ":")
+    @delimiter = delimiter
+  end
 
   def parse(list)
     list
-    .map {|line| line&.strip }
-    .chunk {|line| !line.empty? }
-    .map {|chunk| chunk2hash(chunk) }
+    .chunk {|line| line != "\n" }
+    .select {|not_empty, _| not_empty }
+    .map {|_,properties| props2hash(properties) }
     .reject {|h| h.empty? }
   end
 
-  def chunk2hash(chunk)
-    chunk.last
-    .reject {|properties| properties.empty? }
+  def props2hash(properties)
+    properties
     .map {|property| components(property) }
-    .reject {|prop_kvpair| prop_kvpair.nil? }
+    .select {|pair| pair }
     .to_h
   end
 
   def components(property)
-    k, v = property.split(':')
-    kvpair = [ k&.strip || '', v&.strip || '' ]
-    (kvpair.empty? || kvpair.first.empty?) ? nil : kvpair
+    pair = get_kv(property)
+    (pair.size == 1 || pair.first.empty?) ? nil : pair
+  end
+
+  def get_kv(property)
+    property
+    .split(delimiter,2)
+    .map {|element| clean element }
+  end
+
+  def clean(element)
+    element&.strip || ''
   end
 end
-
