@@ -4,7 +4,9 @@ require_relative 'cmd_runner'
 # If VB can't find a bridged network, do 'vagrant halt'
 # then in VirtualBox Manager be certain
 # that NO adapter is attached to a 'Bridged Adapter'.
+# Be certain no vpn client is running.
 # Finally do 'vagrant up'.
+# Possibly repeat 'vagrant halt'/'vagrant up' dance 1 - 2 times
 # VB does NOT like changes to adapters while up or suspended!
 
 class BridgedInterfaces
@@ -17,17 +19,25 @@ class BridgedInterfaces
   def initialize( cmd: 'VBoxManage.exe list bridgedifs',
                   cmdrunner: CmdRunner,
                   parser: ParseVbManageList )
-    @cmd     = cmd
-    @if_list = cmdrunner.new(cmd: @cmd)
-    @parser  = parser.new
+    @cmd       = cmd
+    @cmdrunner = cmdrunner
+    @parser    = parser
   end
 
   def preferred
-    @parser.parse(@if_list.runcmd)
+    @parser.new.parse(if_list)
     .select {|ifc| ifc['Status'] == 'Up' }
     .sort_by {|ifc| ifc['Wireless'] }
     .first
-    .tap {|ifc| puts IFCNOTAVAIL if ifc.nil? }
+    .tap do |ifc|
+      if not ENV['TESTING']
+        puts IFCNOTAVAIL if ifc.nil?
+      end
+    end
+  end
+
+  def if_list
+    @cmdrunner.run(@cmd)
   end
 end
 
