@@ -1,5 +1,5 @@
 require 'test_helper'
-require_relative '../bridged_interfaces'
+require_relative '../vagrant/helpers/bridged_interfaces'
 require_relative 'mock_runner'
 
 class TestBridgedInterfaces < MiniTest::Test

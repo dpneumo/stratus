@@ -1,5 +1,5 @@
 require 'test_helper'
-require_relative '../parse_vb_manage_list'
+require_relative '../vagrant/helpers/parse_vb_manage_list'
 
 class TestParseVbManageList < MiniTest::Test
   def setup

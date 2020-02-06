@@ -15,29 +15,24 @@ class ParseVbManageList
 
   def parse(list)
     list
-    .map {|pair| clean(pair) }
-    .chunk {|pair| !!pair }
-    .select {|chunk| chunk.first }
-    .map {|chunk| chunk2hash(chunk.last) }
+    .map {|line| line&.strip }
+    .chunk {|line| !line.empty? }
+    .map {|chunk| chunk2hash(chunk) }
     .reject {|h| h.empty? }
   end
 
-  def clean(txt)
-    cleaned = txt&.strip
-    cleaned&.empty? ? nil : cleaned
-  end
-
-  def chunk2hash(items)
-    items
-    .reject {|item| item.empty? }
-    .map {|item| components(item) }
-    .reject {|item| item.empty? || item.first.empty? }
+  def chunk2hash(chunk)
+    chunk.last
+    .reject {|properties| properties.empty? }
+    .map {|property| components(property) }
+    .reject {|prop_kvpair| prop_kvpair.nil? }
     .to_h
   end
 
-  def components(pair)
-    k, v = pair.split(':')
-    [ k&.strip || '', v&.strip || '' ]
+  def components(property)
+    k, v = property.split(':')
+    kvpair = [ k&.strip || '', v&.strip || '' ]
+    (kvpair.empty? || kvpair.first.empty?) ? nil : kvpair
   end
 end
 
