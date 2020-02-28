@@ -10,7 +10,8 @@ class TestParseVbManageList < MiniTest::Test
     persons = @pvl.parse(two_persons)
     assert_equal Array, persons.class
     assert_equal Hash, persons.first.class
-    assert_equal '25', persons.last['Age']
+    assert_equal 'Mitch', persons.first['Name']
+    assert_equal 'Ruby', persons.last['Name']
   end
 
   def test_can_parse_one_person
@@ -28,7 +29,8 @@ class TestParseVbManageList < MiniTest::Test
     persons = @pvl.parse(empty_persons_included)
     assert_equal Array, persons.class
     assert_equal Hash, persons.first.class
-    assert_equal '25', persons.last['Age']
+    assert_equal 'Bob', persons.first['Name']
+    assert_equal '50', persons.last['Age']
   end
 
   def test_parse_handles_variants_of_bad_string_pairs
@@ -41,7 +43,7 @@ class TestParseVbManageList < MiniTest::Test
     def one_person
       [
         "Name:          Mark\n",
-        "Age:           45\n",
+        "Age:           10\n",
         "Sex:           Male\n",
         "FavoriteColor: Green\n",
         "\n"
@@ -53,20 +55,20 @@ class TestParseVbManageList < MiniTest::Test
         "Name:          Jack\n",
         "Age: \n",
         "Sex:           Male\n",
-        "FavoriteColor: Green\n",
+        "FavoriteColor: Grey\n",
         "\n"
       ]
     end
 
     def two_persons
       [
-        "Name:          Mark\n",
-        "Age:           45\n",
+        "Name:          Mitch\n",
+        "Age:           20\n",
         "Sex:           Male\n",
-        "FavoriteColor: Green\n",
+        "FavoriteColor: Blue\n",
         "\n",
         "Name:          Ruby\n",
-        "Age:           25\n",
+        "Age:           30\n",
         "Sex:           Female\n",
         "FavoriteColor: Red\n",
         "\n"
@@ -75,20 +77,20 @@ class TestParseVbManageList < MiniTest::Test
 
     def empty_persons_included
       [
-        "Name:          Mark\n",
-        "Age:           45\n",
+        "Name:          Bob\n",
+        "Age:           40\n",
         "Sex:           Male\n",
-        "FavoriteColor: Green\n",
+        "FavoriteColor: Lavender\n",
         "\n",
         " : \n",
         " : \n",
         " : \n",
         " : \n",
         "\n",
-        "Name:          Ruby\n",
-        "Age:           25\n",
+        "Name:          Poppy\n",
+        "Age:           50\n",
         "Sex:           Female\n",
-        "FavoriteColor: Red\n",
+        "FavoriteColor: Orange\n",
         "\n",
         " : \n",
         " : \n",
