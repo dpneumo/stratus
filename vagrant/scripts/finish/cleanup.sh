@@ -12,8 +12,8 @@ sed -i '/^# Start Setup Vars/,/^# End Setup Vars/d' ~/.bashrc
 sudo sed -i '/^# Start Setup Vars/,/^# End Setup Vars/d' ~/.bashrc
 
 printf "\n========= Cleanup home dir ========================\n"
-if [[ ! -e ~/bkup ]]; then
-  mkdir ~/bkup
+if [[ ! -e /home/vagrant/bkup ]]; then
+  mkdir /home/vagrant/bkup
 fi
-mv  *.sh.* ~/bkup/
+mv  *.sh.* /home/vagrant/bkup/
 

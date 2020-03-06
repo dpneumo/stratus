@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 SRC='/vagrant/client_files'
+DATE="$(date +%s)"
+
 
 # Run as root
 printf "\n========= Install Fail2Ban ==========================\n"
 yum install fail2ban -y
 
-cp $SRC/fail2ban/fail2ban.local   /etc/fail2ban/            -fb --suffix=.$(date +%s)
-cp $SRC/fail2ban/jail.local       /etc/fail2ban/            -fb --suffix=.$(date +%s)
-cp $SRC/fail2ban/jail.d/*.local   /etc/fail2ban/jail.d/     -fb --suffix=.$(date +%s)
-cp $SRC/fail2ban/filter.d/*.local /etc/fail2ban/filter.d/   -fb --suffix=.$(date +%s)
-cp $SRC/fail2ban/gen_badbots      /etc/fail2ban/gen_badbots -fb --suffix=.$(date +%s)
+cp $SRC/fail2ban/fail2ban.local   /etc/fail2ban/            -fb --suffix=.$DATE
+cp $SRC/fail2ban/jail.local       /etc/fail2ban/            -fb --suffix=.$DATE
+cp $SRC/fail2ban/jail.d/*.local   /etc/fail2ban/jail.d/     -fb --suffix=.$DATE
+cp $SRC/fail2ban/filter.d/*.local /etc/fail2ban/filter.d/   -fb --suffix=.$DATE
+cp $SRC/fail2ban/gen_badbots      /etc/fail2ban/gen_badbots -fb --suffix=.$DATE
 
 chmod 644 /etc/fail2ban/fail2ban.local
 chmod 644 /etc/fail2ban/jail.local
