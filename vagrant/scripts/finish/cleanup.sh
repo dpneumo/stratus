@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-BKUP='/home/vagrant/bkup'
-
 printf "\n========= Remove duplicate entries from files =====\n"
 for f in ~/.bash_profile ~/.gemrc /etc/postfix/sasl/sasl_passwd; do
   cp $f $f.bkup
