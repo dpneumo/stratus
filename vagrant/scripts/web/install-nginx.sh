@@ -7,7 +7,7 @@ printf "\n========= Install & configure nginx ===============\n"
 cp $SRC/nginx/nginx.repo   /etc/yum.repos.d/  -fb --suffix=.$DATE
 chmod 644 /etc/yum.repos.d/nginx.repo
 yum update -y
-yum install nginx -y
+yum reinstall nginx -y
 
 cp $SRC/nginx/nginx.conf   /etc/nginx/         -fb --suffix=.$DATE
 cp $SRC/nginx/stratus.conf /etc/nginx/conf.d/  -fb --suffix=.$DATE

@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
-# vm-env is a synced folder from outside stratus
+# The vm-env folder holds scripts to set env vars
+# to localize/personalize the setup and
+# to provide sensitive information to the app.
+# It is a synced folder from outside stratus
 # It will/must NEVER be committed to GIT
+
+source /vagrant/vagrant/bash_fns.sh
 
 SRC='vm-env'
 BKUP='/home/vagrant/bkup'
@@ -13,7 +18,4 @@ chmod 755             base-env.sh
 source ./base-env.sh
 
 # Cleanup home dir
-if [[ ! -e $BKUP ]]; then mkdir $BKUP; fi
-if [[ -e "base-env.sh.$DATE" ]]; then
-  mv base-env.sh.$DATE $BKUP/
-fi
+move2bkup -b $BKUP -- base-env.sh.$DATE

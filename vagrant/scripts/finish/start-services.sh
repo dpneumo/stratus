@@ -1,22 +1,22 @@
-!/usr/bin/env bash
+#!/usr/bin/env bash
 SRC='/vagrant/client_files'
 
 # Run as root
 printf "\n========= Reload SSH server =======================\n"
 systemctl reload sshd.service
 
-printf "\n========= Restart Postfix =========================\n"
+printf "========= Restart Postfix =========================\n"
 systemctl restart postfix
 
-printf "\n========= Restart Nginx ===========================\n"
+printf "========= Restart Nginx ===========================\n"
 systemctl restart nginx
 systemctl enable nginx
 
-printf "\n========= Restart Redis ===========================\n"
+printf "========= Restart Redis ===========================\n"
 systemctl restart redis_stratus
 systemctl enable redis_stratus
 
-printf "\n========= Restart Sidekiq =========================\n"
+printf "========= Restart Sidekiq =========================\n"
 systemctl restart sidekiq
 systemctl enable sidekiq
 
@@ -30,7 +30,7 @@ systemctl start iptables
 systemctl enable iptables
 
 
-printf "\n========= Restart Fail2Ban ========================\n"
+printf "========= Restart Fail2Ban ========================\n"
 # Don't start fail2ban until all else is working
 #systemctl restart fail2ban
 #systemctl enable fail2ban

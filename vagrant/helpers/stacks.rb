@@ -41,8 +41,8 @@ module Stack
 
       'finish' => {
         'create_certs.sh'   => 'priv',
-        'finalize-setup.sh' => 'unpriv',
         'start-services.sh' => 'priv',
+        'cleanup-priv.sh'   => 'priv',
         'cleanup.sh'        => 'unpriv',
       },
 

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+source /vagrant/vagrant/bash_fns.sh
+
 SRC='/vagrant/client_files'
 BKUP='/home/vagrant/bkup'
 DATE="$(date +%s)"
@@ -38,10 +40,5 @@ chmod 666 /var/log/ip6tables_rules_install.log
 ./iptables_rules6.sh >> /var/log/ip6tables_rules_install.log
 
 # Cleanup home dir
-if [[ ! -e $BKUP ]]; then mkdir $BKUP; fi
-if [[ -e "iptables_rules4.sh.$DATE" ]]; then
-  mv iptables_rules4.sh.$DATE $BKUP
-fi
-if [[ -e "iptables_rules6.sh.$DATE" ]]; then
-  mv iptables_rules6.sh.$DATE $BKUP
-fi
+move2bkup -b $BKUP -- iptables_rules4.sh.$DATE \
+                      iptables_rules6.sh.$DATE

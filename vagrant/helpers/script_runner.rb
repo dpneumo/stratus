@@ -5,7 +5,7 @@ class ScriptRunner
 
   # StackList = %w[ demo_app ]
   # StackList = %w[ base ruby web rails ]
-  StackList = %w[ base ruby web demo_app ]
+  StackList = %w[ base ruby web finish ]
   # StackList = %w[ base ]
 
   def initialize(vm:)

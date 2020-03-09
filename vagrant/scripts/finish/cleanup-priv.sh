@@ -4,9 +4,9 @@ source /vagrant/vagrant/bash_fns.sh
 BKUP='/home/vagrant/bkup/'
 DATE="$(date +%s)"
 
-# Run unprivileged.
+# Run privileged.
 printf "\n========= Remove duplicate entries from files =====\n"
-FILES=( /home/vagrant/.bash_profile /home/vagrant/.gemrc )
+FILES=( /etc/postfix/sasl/sasl_passwd )
 
 for f in "${FILES[@]}"; do
   cp $f $f.bkup -fb --suffix=.$DATE
