@@ -7,7 +7,7 @@ function createdir() {
     mkdir "$mydir"
     if [ $? -gt 0 ]; then
       echo "$mydir does not exist and could not be created."
-      return 1
+      return 0
     fi
   fi
 }
@@ -27,6 +27,6 @@ function move2bkup() {
   mv ${file_list[@]} ${bkup}/
   if (( $? != 0 )); then
     echo "Unable to move ${file_list[*]} to ${bkup}" >&2
-    return 1
+    return 0
   fi
 }

@@ -14,7 +14,8 @@ cp $SRC/nginx/stratus.conf /etc/nginx/conf.d/  -fb --suffix=.$DATE
 cp $SRC/nginx/demo_app.conf /etc/nginx/conf.d/ -fb --suffix=.$DATE
 chmod 644 /etc/nginx/nginx.conf /etc/nginx/conf.d/*
 if [[ ! -f /etc/nginx/dhparam.pem ]]; then
-  openssl dhparam -out /etc/nginx/dhparam.pem 4096
+  echo "This will take a loooong time. Go get coffee. Maybe two cups!"
+  openssl dhparam -out /etc/nginx/dhparam.pem 4096 > /dev/null
 else
   echo "dhparam.pem exists. Did not replace it."
 fi
