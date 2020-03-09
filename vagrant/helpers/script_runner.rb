@@ -17,6 +17,7 @@ class ScriptRunner
     @vm.provision :shell,
                   run: "always",
                   privileged: true,
+                  binary: true,
                   inline: <<-SHELL
     ip route get 8.8.8.8 | awk '{print $7}' | xargs -I IPADDR echo "BRIDGED IP: IPADDR"
     netstat -rn
